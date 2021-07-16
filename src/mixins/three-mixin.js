@@ -9,11 +9,11 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('resize', this.onResize);
+        // window.addEventListener('resize', this.onResize);
         this.initLoad && this.load();
     },
     destroyed() {
-        window.removeEventListener('resize', this.onResize);
+        // window.removeEventListener('resize', this.onResize);
     },
     methods: {
         load() {
@@ -51,14 +51,18 @@ export default {
         },
         resizeRenderToDisplaySize(renderer){
             renderer = renderer || this.renderer;
+            const container = this.getContainer();
             const canvas = renderer.domElement;
             const pixelRatio = window.devicePixelRatio;
-            const width = canvas.clientWidth * (pixelRatio | 0);
-            const height = canvas.clientHeight * (pixelRatio | 0);
+            const width = container.clientWidth * (pixelRatio | 1);
+            const height = container.clientHeight * (pixelRatio | 1);
             const needResize = canvas.width !== width || canvas.height !== height;
             if(needResize) {
+                canvas.width = width;
+                canvas.height = height;
                 renderer.setSize(width, height, false);
             }
+            console.log('needResize', needResize);
             return needResize;
         },
     }

@@ -12,6 +12,12 @@ const routes = [
       import( "../views/three/index.vue"),
   },
   {
+    path: "/dragBox",
+    name: "dragBox",
+    component: () =>
+      import( "../views/drag-box/index.vue"),
+  },
+  {
     path: '',
     redirect: 'threeJsDemo',
   }
