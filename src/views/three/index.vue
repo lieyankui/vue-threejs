@@ -13,7 +13,7 @@
 
 <script>
 import compArr from './comp.conf';
-import { _import } from '@/utils';
+import { _importView } from '@/utils';
 export default {
     name: 'VueThreejsIndex',
     data() {
@@ -33,7 +33,7 @@ export default {
             if(this.currNavItem === item) return;
             this.currNavItem = item;
             const { compPath } = item;
-            this.currComp = _import(compPath);
+            this.currComp = _importView(compPath);
         }
     },
 };

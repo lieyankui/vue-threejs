@@ -5,7 +5,13 @@ import store from "./store";
 import * as THREE from 'three';
 import '@/styles/base.scss';
 import 'normalize.css/normalize.css';
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
+
+
 Vue.prototype.$three = THREE;
+// use element-ui
+Vue.use(ElementUI)
 
 Vue.config.productionTip = false;
 
