@@ -60,7 +60,7 @@
     },
     // 计算初始化参数
     calcInitData: function () {
-      var _this = this;   
+      var _this = this;
       var el = _this.el;
       var config = _this.config;
       var colNum = config.colNum;

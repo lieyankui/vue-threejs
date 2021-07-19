@@ -1,16 +1,20 @@
 <template>
   <div class="comp-container" :ref="container">
     <tl-grid-template :data="initConfData"></tl-grid-template>
+    <!-- <test-drag></test-drag> -->
   </div>
 </template>
 
 <script>
 import { DragBoxWrapper, DragBoxItem } from "@/models/index";
 import TlGridTemplate from "@/components/tl-grid-template/index";
+import TestDrag from "@/components/test-drag";
+
 export default {
   name: "VueThreejsIndex",
   components: {
     TlGridTemplate,
+    TestDrag,
   },
   data() {
     return {

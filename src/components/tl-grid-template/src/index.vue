@@ -491,10 +491,15 @@ export default {
     };
   },
   created() {
+    console.log('this', this);
     this.initData();
     this.initCompArr(this.componentArr);
+    this.initEvents();
   },
   mounted() {},
+  destroyed() {
+    this.cancelEvents();
+  },
   watch: {
     ["tableParams.rowNum"](val) {
       // 行数改变时执行的方法
@@ -566,6 +571,20 @@ export default {
         colNum: this.initColNum,
       };
       this.tableParams = tableParams;
+    },
+    /**
+     * 初始化事件
+     */
+    initEvents() {
+      window.addEventListener('mousemove',this.onMouseMove);
+      window.addEventListener('mouseup',this.onMouseUp);
+    },
+    /**
+     * 取消事件
+     */
+    cancelEvents() {
+      window.removeEventListener('mousemove',this.onMouseMove);
+      window.removeEventListener('mouseup',this.onMouseUp);
     },
     /**
      * 绑定的data数据发生改变时执行的方法
@@ -685,6 +704,20 @@ export default {
     onMouseDown(event, td){
       console.log("event", event);
       console.log('td', td);
+      console.log('event.button', event.button);
+    },
+    /**
+     * 鼠标移动时执行的方法
+     */
+    onMouseMove(event) {
+      console.log('onMouseMove this', this);
+    },
+
+    /**
+     *鼠标谈起时执行的方法
+     */
+    onMouseUp(event) {
+      console.log('onMouseUp this', this);
     },
     /**
      * 组件拖动时执行的方法  设置事件数据传输对象用来传输参数
