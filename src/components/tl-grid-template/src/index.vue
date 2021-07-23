@@ -702,22 +702,22 @@ export default {
      *
      */
     onMouseDown(event, td){
-      console.log("event", event);
-      console.log('td', td);
-      console.log('event.button', event.button);
+      // console.log("event", event);
+      // console.log('td', td);
+      // console.log('event.button', event.button);
     },
     /**
      * 鼠标移动时执行的方法
      */
     onMouseMove(event) {
-      console.log('onMouseMove this', this);
+      // console.log('onMouseMove this', this);
     },
 
     /**
      *鼠标谈起时执行的方法
      */
     onMouseUp(event) {
-      console.log('onMouseUp this', this);
+      // console.log('onMouseUp this', this);
     },
     /**
      * 组件拖动时执行的方法  设置事件数据传输对象用来传输参数
@@ -1052,6 +1052,7 @@ export default {
         left: 10px;
         overflow: hidden;
         box-shadow: 3px 3px 10px 0px #cccccc;
+        background: skyblue;
         border-radius: 10px;
         & > * {
           max-width: 100%;

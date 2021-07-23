@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Phone Wall</title>
+<link rel="stylesheet" type="text/css" href="../css/my_css.css"/>
+<style type="text/css">
+	body,html{
+		width:100%;
+		height:100%;
+		overflow:auto;
+	}
+	*{
+		margin:0;
+		border:0;
+		padding:0;
+	}
+	.photoBox{
+		width:100%;
+		/* height:100%; */
+		position:relative;
+		padding:50px 20px 20px 20px;
+		/* overflow:auto; */
+	}
+	.imageDiv{
+		position:absolute;
+		z-index:1;
+		box-shadow:5px 5px 20px rgba(135, 139, 144, 0.4);
+		-webkit-transition: all 0.5s ease-in;
+		/* transition属性
+		参数1：规定设置过渡效果的 CSS 属性的名称。（可以为none和all）none 值表示没有变化  all 值表示所有可以动画演示的属性都可以触发动画效果
+		参数2：规定完成过渡效果需要多少秒或毫秒。
+		参数3：规定速度效果的速度曲线。
+		参数3：定义过渡效果何时开始。（动画开始前的延迟时间）
+		 */
+		background-size:100% 100%;
+	}
+	.imageDiv:hover{
+		z-index:2;
+		transform:rotate(0deg) scale(1.2);
+		box-shadow:5px 5px 40px rgba(135, 139, 144, 0.4);
+	}
+	.imageDiv1{
+		top:100px;
+		left:34px;
+		width:256px;
+		height:300px;
+		transform:rotate(15deg);
+		background:url(../imgs/193.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv2{
+		top:78px;
+		left:250px;
+		width:256px;
+		height:300px;
+		transform:rotate(25deg);
+		background:url(../imgs/194.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv3{
+		top:300px;
+		left:20px;
+		width:256px;
+		height:300px;
+		transform:rotate(12deg);
+		background:url(../imgs/195.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv4{
+		top:250px;
+		left:460px;
+		width:256px;
+		height:300px;
+		transform:rotate(23deg);
+		background:url(../imgs/196.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv5{
+		top:523px;
+		left:644px;
+		width:256px;
+		height:300px;
+		transform:rotate(-15deg);
+		background:url(../imgs/197.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv6{
+		top:581px;
+		left:561px;
+		width:256px;
+		height:300px;
+		transform:rotate(-12deg);
+		background:url(../imgs/294.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv7{
+		top:326px;
+		left:624px;
+		width:256px;
+		height:300px;
+		transform:rotate(20deg);
+		background:url(../imgs/300.jpg);
+		background-size:100% 100%;
+	}
+	.imageDiv8{
+		top:500px;
+		left:456px;
+		width:256px;
+		height:300px;
+		transform:rotate(-20deg);
+		background:url(../imgs/174.jpg);
+		background-size:100% 100%;
+	}
+	body::-webkit-scrollbar{
+		width: 10px;
+    	background-color: rgba(0,0,0,0);
+    	border-radius: 5px;
+	}
+	body::-webkit-scrollbar-thumb{
+		border-radius: 10px;
+		background-color:rgba(204,204,204,1);
+	}
+</style>
+</head>
+<body>
+<div class="photoBox">
+	<div class="imageDiv imageDiv1"></div>
+	<div class="imageDiv imageDiv2"></div>
+	<div class="imageDiv imageDiv3"></div>
+	<div class="imageDiv imageDiv4"></div>
+	<div class="imageDiv imageDiv5"></div>
+	<div class="imageDiv imageDiv6"></div>
+	<div class="imageDiv imageDiv7"></div>
+	<div class="imageDiv imageDiv8"></div>
+</div>
+</body>
+</html>

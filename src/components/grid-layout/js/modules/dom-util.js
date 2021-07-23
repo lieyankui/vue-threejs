@@ -107,8 +107,8 @@ define(function () {
       if (_this.isElement(dom)) {
         var minX = _this.getLeft(dom);
         var minY = _this.getTop(dom);
-        var centerX = mixX + _this.getWidth(dom) / 2;
-        var centerY = mixX + _this.getHeight(dom) / 2;
+        var centerX = minX + _this.getWidth(dom) / 2;
+        var centerY = minY + _this.getHeight(dom) / 2;
         return {
           x: centerX,
           y: centerY,

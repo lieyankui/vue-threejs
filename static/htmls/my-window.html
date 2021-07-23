@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My window</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="../css/my_screen.css" />
+    <script type="text/javascript" src="../js/my_screen.js"></script>
+    <script type="text/javascript" src="../js/dom_rela.js"></script>
+    <style type="text/css">
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        padding: 0px;
+        margin: 0px;
+        border: 0px;
+        text-align: center;
+      }
+      #main_div {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main_div">
+      <div id="myScreen">
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+        <span style="color: red; display: block">11111</span>
+      </div>
+      <div id="myScreen1">2222</div>
+      <div id="myScreen2">3333</div>
+      <div id="myScreen3">4444</div>
+      <div id="myScreen4">5555</div>
+      <div id="myScreen5">6666</div>
+    </div>
+    <script type="text/javascript">
+      window.onload = function () {
+        var screen1 = new MyScreen("myScreen", {
+          width: "400px",
+          height: "250px",
+          resizable: true,
+        });
+        var screen2 = new MyScreen("myScreen1", {
+          width: "400px",
+          height: "250px",
+        });
+        var screen3 = new MyScreen("myScreen2", {
+          width: "400px",
+          height: "250px",
+          resizable: true,
+        });
+        var screen4 = new MyScreen("myScreen3", {
+          width: "400px",
+          height: "250px",
+        });
+        var screen5 = new MyScreen("myScreen4", {
+          width: "400px",
+          height: "250px",
+          resizable: true,
+        });
+        var screen6 = new MyScreen("myScreen5", {
+          width: "400px",
+          height: "250px",
+        });
+        screen1.setTitle("screen1");
+        screen2.setTitle("screen2");
+        screen3.setTitle("screen3");
+        screen4.setTitle("screen4");
+        screen5.setTitle("screen5");
+        screen6.setTitle("screen6");
+      };
+
+      function test() {
+        var args = arguments;
+        for (var i = 0; i < args.length; i++) {
+          console.log(i + 1);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Cherry Down</title>
+    <meta name="Generator" content="EditPlus" />
+    <meta name="Author" content="" />
+    <meta name="Keywords" content="" />
+    <meta name="Description" content="" />
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../js/my.js"></script>
+    <script type="text/javascript" src="../js/myUtil.js"></script>
+    <script type="text/javascript" src="../js/screen_dom_hit.js"></script>
+    <style type="text/css">
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #main_div {
+        margin: auto auto;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border: 2px solid #e6e6e6;
+        /* transform-style:preserve-3d; */
+      }
+      .item_span {
+        padding: 5px 10px;
+        border: 1px solid #e6e6e6;
+        display: inline-block;
+        box-sizing: border-box;
+        line-height: 24px;
+        position: absolute;
+      }
+      .ball_dom {
+        width: 40px;
+        height: 40px;
+        /* padding:5px 10px; */
+        border-radius: 20px;
+        text-align: center;
+        line-height: 40px;
+      }
+      .flower {
+        width: 6px;
+        height: 6px;
+        /* padding:5px 10px; */
+        border-radius: 4px;
+        text-align: center;
+        line-height: 8px;
+        position: absolute;
+        top: 200px;
+        left: 100px;
+      }
+      .flower .petal {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        border-radius: 8px;
+        border: 1px solid skyblue;
+        z-index: 1;
+        background: pink;
+      }
+      .flower .petal:nth-child(1) {
+        top: -2px;
+        left: -5px;
+      }
+      .flower .petal:nth-child(2) {
+        left: -2px;
+        top: -5px;
+      }
+      .flower .petal:nth-child(3) {
+        top: -2px;
+        right: -7px;
+      }
+      .flower .petal:nth-child(4) {
+        left: -2px;
+        bottom: -7px;
+      }
+      .flower .center {
+        width: 100%;
+        height: 100%;
+        /* padding:5px 10px; */
+        border-radius: 20px;
+        text-align: center;
+        line-height: 1;
+        position: absolute;
+        border: 1px solid skyblue;
+        z-index: 2;
+        background: yellow;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      background: url(../imgs/273.jpg);
+      background-size: 100% 100%;
+    "
+  >
+    <div id="main_div"></div>
+    <script type="text/javascript">
+      $(function () {
+        for (var i = 0; i < 100; i++) {
+          //var dom=;
+          $("#main_div").append(
+            $(
+              "<div class='flower'>" +
+                "<div class='petal'></div>" +
+                "<div class='petal'></div>" +
+                "<div class='petal'></div>" +
+                "<div class='petal'></div>" +
+                "<div class='center'></div>" +
+                "</div>"
+            )
+          );
+        }
+        var ballDivs = $(".flower");
+        var ballArr = [];
+        if (ballDivs && ballDivs.length) {
+          for (var i = 0; i < ballDivs.length; i++) {
+            var pointInfo = randomPoint({ width: "40", height: "40" }, $("#main_div").get(0));
+            var cherry = new MoveEle(ballDivs[i], {
+              left: pointInfo.xRange + "px",
+              top: pointInfo.yRange + "px",
+            });
+            cherry.move();
+            ballArr.push(cherry);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

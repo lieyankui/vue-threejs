@@ -15,7 +15,13 @@ const routes = [
     path: "/dragBox",
     name: "dragBox",
     component: () =>
-      import( "../views/drag-box/index.vue"),
+      import( "../views/grid-template/index.vue"),
+  },
+  {
+    path: "/demo",
+    name: "demo",
+    component: () =>
+      import( "../views/index.vue"),
   },
   {
     path: '',

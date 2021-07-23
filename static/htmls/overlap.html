@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      * {
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+      }
+      body, html {
+          width: 100%;
+          height: 100%;
+      }
+      #main_div {
+        margin: auto auto;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border: 2px solid #e6e6e6;
+      }
+      .item_span {
+        padding: 5px 10px;
+        border: 1px solid #e6e6e6;
+        display: inline-block;
+        box-sizing: border-box;
+        line-height: 24px;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main_div"></div>
+    <script type="text/javascript">
+      var mainDiv = getDom("main_div");
+      var dataArr = [
+        { id: 1, name: "aaaaaaaaaaaa" },
+        { id: 2, name: "bbbbbbbb" },
+        { id: 3, name: "cccccccc" },
+        { id: 4, name: "ddddd" },
+        { id: 5, name: "eeeeeeeeeeeeeeeee" },
+        { id: 6, name: "ffffffffffffffffffff" },
+        { id: 7, name: "ggggggggg" },
+        { id: 8, name: "hhhhhh" },
+        { id: 9, name: "iiiiiiiiiiiiiiiiiiii" },
+        { id: 10, name: "jjjjjjjjjjjjj" },
+        { id: 11, name: "kkkkkkkkkkkkk" },
+        { id: 12, name: "llllllllllllllllll" },
+        { id: 13, name: "mmmmmmmm" },
+        { id: 14, name: "nnnnnnnnnnnnnnnn" },
+        { id: 15, name: "ooooooooooooooooooooooooooooo" },
+        { id: 16, name: "pppppppp" },
+        { id: 17, name: "qqqqqqqqqqqqqqqqq" },
+        { id: 18, name: "rrrrrrrrr" },
+        { id: 19, name: "ssssssssssssssssssss" },
+        { id: 20, name: "tttttttttttt" },
+        { id: 21, name: "uuuuuuuuuuu" },
+        { id: 22, name: "vvvvvvvvvvvvvvvvv" },
+        { id: 23, name: "wwwwwwwwwwwwwwwwwww" },
+        { id: 24, name: "xxxxxxxxxxxxx" },
+        { id: 25, name: "yyyyyyy" },
+        { id: 26, name: "zzzzzzzzzzzzzzzzzzzzzzzzz" },
+      ];
+      window.onload = function () {
+        //console.log(mainDiv);
+        var speedArr = [-1, 1];
+        for (var i = 0; i < dataArr.length; i++) {
+          var data = dataArr[i];
+          var itemSpan = createDom("span", mainDiv);
+          itemSpan.className = "item_span";
+          itemSpan.innerHTML = data.name;
+          itemSpan.setAttribute("dataId", data.id);
+          var dataId = itemSpan.getAttribute("dataId");
+          window["movedDom" + dataId] = {};
+          //alert(Math.round(Math.random()));
+          window["movedDom" + dataId].speed =
+            speedArr[Math.round(Math.random())];
+          window["movedDom" + dataId].dir = "x";
+          randomPosition(itemSpan);
+          setTimerMove(itemSpan);
+        }
+      };
+      function setTimerMove(dom) {
+        var dataId = dom.getAttribute("dataId");
+        window["movedDom" + dataId].timer = setInterval(function () {
+          moveDom(dom);
+        }, 3);
+      }
+      // 移动元素
+      function moveDom(dom) {
+        var pNode = dom.parentNode;
+        var dataId = dom.getAttribute("dataId");
+        var maxX = pNode.clientWidth - 3;
+        var maxY = pNode.clientHeight - 3;
+        var startX = getLeftVal(dom);
+        var startY = getTopVal(dom);
+        if (
+          domIsOverlap(dom) ||
+          startX + dom.clientWidth >= maxX ||
+          startX <= 3
+        ) {
+          window["movedDom" + dataId].speed =
+            -window["movedDom" + dataId].speed;
+          if (startX + dom.clientWidth >= maxX) {
+            dom.style.left = maxX - 2 + "px";
+          } else if (startX <= 3) {
+            dom.style.left = 6 + "px";
+          }
+        }
+        dom.style.left = startX + window["movedDom" + dataId].speed + "px";
+      }
+      // 随机元素位置
+      function randomPosition(dom) {
+        var domInfo = { height: dom.clientHeight, width: dom.clientWidth };
+        //console.log(domInfo);
+        var positionInfo = randomPoint(domInfo, mainDiv);
+        //console.log(positionInfo);
+        dom.style.left = positionInfo.xRange + "px";
+        dom.style.top = positionInfo.yRange + "px";
+        if (domIsOverlap(dom)) {
+          randomPosition(dom);
+        }
+      }
+      // 获取元素的位置范围
+      function getDomRange(dom) {
+        var minX = getLeftVal(dom);
+        var minY = getTopVal(dom);
+        var dataId = dom.getAttribute("dataId");
+        if (window["movedDom" + dataId]) {
+          if (window["movedDom" + dataId].dir == "x") {
+            minX = window["movedDom" + dataId].speed + minX;
+          } else {
+            minY = window["movedDom" + dataId].speed + minY;
+          }
+        }
+        var maxX = Math.ceil(minX + dom.clientWidth);
+        var maxY = Math.ceil(minY + dom.clientHeight);
+        //console.log("domRange",{left:left,top:top});
+        return { minX: minX, minY: minY, maxX: maxX, maxY: maxY };
+      }
+      // 判断元素是否和其他元素重叠
+      function domIsOverlap(dom) {
+        var flag = false;
+        var domRange = getDomRange(dom);
+        var doms = dom.parentNode.children;
+        var broDoms = [];
+        for (var i = 0; i < doms.length; i++) {
+          if (dom !== doms[i]) {
+            var domRangeBro = getDomRange(doms[i]);
+            if (isOverLap(dom, doms[i])) {
+              flag = true;
+              break;
+            }
+          }
+        }
+        return flag;
+        //alert(doms.length+"==="+broDoms.length);
+      }
+      // 判断两个元素是否重叠
+      function isOverLap(dom1, dom2) {
+        var domRange1 = getDomRange(dom1);
+        var midPoint1X =
+          domRange1.minX +
+          Math.ceil(Math.abs(domRange1.maxX - domRange1.minX) / 2);
+        var startPoint1X = Math.ceil(
+          Math.abs(domRange1.maxX - domRange1.minX) / 2 + 3
+        );
+        var midPoint1Y =
+          domRange1.minY +
+          Math.ceil(Math.abs(domRange1.maxY - domRange1.minY) / 2);
+        var startPoint1Y = Math.ceil(
+          Math.abs(domRange1.maxY - domRange1.minY) / 2 + 2
+        );
+        var domRange2 = getDomRange(dom2);
+        var midPoint2X =
+          domRange2.minX +
+          Math.ceil(Math.abs(domRange2.maxX - domRange2.minX) / 2);
+        var startPoint2X = Math.ceil(
+          Math.abs(domRange2.maxX - domRange2.minX) / 2 + 3
+        );
+        var midPoint2Y =
+          domRange2.minY +
+          Math.ceil(Math.abs(domRange2.maxY - domRange2.minY) / 2);
+        var startPoint2Y = Math.ceil(
+          Math.abs(domRange2.maxY - domRange2.minY) / 2 + 2
+        );
+        if (
+          !(Math.abs(midPoint1X - midPoint2X) > startPoint1X + startPoint2X) &&
+          !(Math.abs(midPoint1Y - midPoint2Y) > startPoint1Y + startPoint2Y)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      //获取left属性值
+      function getLeftVal(dom) {
+        var left = dom.style.left || dom.offsetLeft;
+        return parseInt(left);
+      }
+      //获取top属性值
+      function getTopVal(dom) {
+        var top = dom.style.top || dom.offsetTop;
+        return parseInt(top);
+      }
+      //操作dom的方法
+      function getDom(domId) {
+        return document.getElementById(domId);
+      }
+      //创建dom元素
+      function createDom(domType, pdom, styleJson) {
+        var dom = document.createElement(domType);
+        if (!pdom) {
+          return dom;
+        }
+        pdom.appendChild(dom);
+        setStyle(dom, styleJson);
+        return dom;
+      }
+      //设置参数dom的样式
+      function setStyle(dom, styleJson) {
+        if (!dom) {
+          return;
+        }
+        for (var name in styleJson) {
+          dom.style[name] = styleJson[name];
+        }
+      }
+      //在页面中随机一个位置
+      function randomPoint(domInfo, pDom) {
+        var xRange, yRange;
+        if (domInfo) {
+          xRange = Math.round(
+            Math.random() *
+              (parseInt(pDom ? pDom.clientWidth : pageWidth) -
+                domInfo.width -
+                20)
+          );
+          yRange = Math.round(
+            Math.random() *
+              (parseInt(pDom ? pDom.clientHeight : pageHeight) -
+                domInfo.height -
+                20)
+          );
+        } else {
+          xRange = Math.round(Math.random() * (totalW ? totalW : pageWidth));
+          yRange = Math.round(Math.random() * (totalH ? totalH : pageHeight));
+        }
+        return { xRange: parseInt(xRange) + 10, yRange: parseInt(yRange) + 10 };
+      }
+    </script>
+  </body>
+</html>

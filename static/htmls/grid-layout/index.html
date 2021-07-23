@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      .grid-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: grid;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container"></div>
+  </body>
+
+  <script
+    src="./js/require.js"
+    defer
+    async="true"
+    data-main="./js/index"
+  ></script>
+</html>

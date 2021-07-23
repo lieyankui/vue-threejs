@@ -1,0 +1,96 @@
+div{
+	box-sizing:border-box;
+}
+.my_screen_container{
+	display:inline-block;
+	width:400px;
+	height:240px;
+	margin:10px;
+	position:relative;
+	/* border:1px solid #e6e6e6; */
+}
+.my_screen_header{
+	height:40px;
+	width:100%;
+	line-height:40px;
+	background:skyblue;
+	border-radius:10px 10px 0px 0px;
+	position:relative;
+}
+.my_screen_header_title{
+	line-height:40px;
+	font-size:14px;
+	height:40px;
+	position:absolute;
+	left:10px;
+	display:inline-block;
+	font-weight:bold;
+}
+.my_screen_header_icons{
+    height:40px;
+	position:absolute;
+	right:10px;
+	display:inline-block;
+}
+.my_screen_header_icon{
+	position:relative;
+    height:30px;
+    line-height:30px;
+  	width:35px;
+  	display:inline-block;
+  	text-align:center;
+  	cursor:pointer;
+}
+.my_screen_header_icon_min{
+	color:white;
+}
+.my_screen_header_icon_max{
+	color:white;
+}
+.my_screen_header_icon_close{
+	color:white;
+}
+.my_screen_content{
+	height:200px;
+	width:100%;
+	background:skyblue;
+	padding:0px 5px 5px 5px;
+	border-radius:0px 0px 10px 10px;
+}
+.my_screen_content_inner{
+	background:#ffffff;
+	height:194px;
+	border:1px solid #e6e6e6;
+	border-radius:0px 0px 5px 5px;
+	overflow:auto;
+	padding:10px;
+	text-align:left;
+}
+.my_screen_toolbar_title{
+	position:relative;
+	height:30px;
+	line-height:30px;
+	max-width:130px;
+	margin:5px 10px;
+	padding:0px 10px;
+	display:inline-block;
+	text-align:center;
+	border:1px solid #ffffff;
+	border-radius:5px;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
