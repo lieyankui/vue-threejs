@@ -8,7 +8,7 @@ import ThreeMixin from '@/mixins/three-mixin';
 import { loadGltf } from '@/utils/three-utils';
 
 
-// 
+//
 export default {
     name: 'VueThreejsLine',
     mixins: [ ThreeMixin ],
@@ -18,7 +18,7 @@ export default {
         };
     },
     mounted() {
-        
+
     },
     methods: {
         loadCb({scene, camera, renderer}) {
@@ -30,8 +30,10 @@ export default {
             // var material = new $three.MeshBasicMaterial( { color: 0x0000ff } );
 
             loadGltf('static/models/phoenix_bird/scene.gltf').subscribe(gltf => {
-                console.log('gltf', gltf);
-                console.log('gltf.scene', gltf.scene);
+                // console.log('gltf', gltf);
+                // console.log('gltf.scene', gltf.scene);
+                const model = gltf;
+
                 scene.add( gltf.scene );
                 gltf.animations; // Array<THREE.AnimationClip>
                 gltf.scene; // THREE.Scene

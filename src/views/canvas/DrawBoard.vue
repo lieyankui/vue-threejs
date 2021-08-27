@@ -8,12 +8,14 @@
         <button @click="changeFillType">改变填充方式</button>
         <button @click="changeClosePath">改变路径是否闭合</button>
         <button @click="clearCanvas">清空画布</button>
+        <button @click="saveAsImage">另存为图片</button>
       </div>
     </div>
     <div class="my-content">
       <canvas id="drawBoard">
         您的浏览器不支持canvas标签<i class="iconfont icon-cry"></i>~!
       </canvas>
+      <img :src="imgUrl" class="img" :class="{'img-show': !!imgUrl}">
     </div>
   </div>
 </template>
@@ -21,6 +23,7 @@
 <script>
 //引入dom_rela工具js文件
 import { getXAndYByDom } from "@/utils/dom_rela";
+import { saveAsImg } from '@/utils/canvas_utils';
 export default {
   props: {},
   data() {
@@ -29,8 +32,10 @@ export default {
       isFill: false,
       closePath: false,
       ctx: {},
+      canvas: null,
       canvasWidth: 0,
-      canvasHeight: 0
+      canvasHeight: 0,
+      imgUrl: null,
     };
   },
   created() {},
@@ -50,8 +55,13 @@ export default {
     clearCanvas() {
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     },
+    saveAsImage() {
+      const canvas = this.canvas;
+      saveAsImg("#drawBoard");
+    },
     setCanvasSize() {
       let item = document.querySelector("#drawBoard");
+      this.canvas = item;
       // console.log('canvasArr', canvasArr)
       let pNode = item.parentNode;
       let width = pNode.clientWidth;
@@ -141,6 +151,7 @@ export default {
   margin-left: 20px;
 }
 .my-content {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   /* padding: 2% 2%; */
@@ -158,4 +169,17 @@ canvas {
   transform: scale(1.1);
   cursor: pointer;
 } */
+.img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transition: all .3s ease-in-out;
+}
+.img-show {
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
 </style>

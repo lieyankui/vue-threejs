@@ -491,7 +491,7 @@ export default {
     };
   },
   created() {
-    console.log('this', this);
+    // console.log('this', this);
     this.initData();
     this.initCompArr(this.componentArr);
     this.initEvents();

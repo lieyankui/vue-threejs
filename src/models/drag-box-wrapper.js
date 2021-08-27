@@ -1,6 +1,7 @@
 import { Subject } from "rxjs";
+import { Logger } from './logger';
 
-export class DragBoxWrapper {
+export class DragBoxWrapper extends Logger{
     // DragBoxItem array
     items = [];
     $ele = null;
@@ -8,7 +9,7 @@ export class DragBoxWrapper {
     constructor(ele) {
         this.log('constructor', 'start');
         this.$ele = ele;
-        
+
         this.init();
         this.log('constructor', 'end');
     }
@@ -27,7 +28,7 @@ export class DragBoxWrapper {
         this.height = $ele.clientHeight;
         this.log('initData', 'end');
     }
-    
+
     initEvents() {
         window.addEventListener('resize', (e) => {
             this.onResize(e);
@@ -64,24 +65,7 @@ export class DragBoxWrapper {
 
     onResize(e) {
         this.log('onResize', 'event', e);
-        
+
     }
 
-    log(method, message, content) {
-        console.log(`【${this.formatDate()}】[DragBoxItem]--method: [${method}]: ${message}`, content);
-    }
-    
-    formatDate(date) {
-        date = date || new Date();
-        date = new Date();
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        // const week = date.getDay();
-        const hour = date.getHours();
-        const minute = date.getMinutes();
-        const second = date.getSeconds();
-        const milliSeconds = date.getMilliseconds();
-        return `${year}-${month}-${day} ${hour}:${minute}:${second} ${milliSeconds}`;
-    }
 }

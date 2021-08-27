@@ -283,6 +283,48 @@ export default {
   },
   mounted() {
     const wrapper = new DragBoxWrapper(this.getContainer);
+    // const array = ['1', '2', '3'].map(parseInt);
+    // console.log('array', array);
+    // console.log('parseInt("2", 1)', parseInt("2", 1));// NaN
+    // console.log('parseInt("1", 1)', parseInt("1", 1));// NaN
+    // console.log('parseInt("0", 1)', parseInt("0", 1));//
+    // console.log('parseInt("3", 2)', parseInt("3", 2));// NaN
+    // console.log('parseInt("2", 2)', parseInt("2", 2));// NaN
+    // console.log('parseInt("1", 2)', parseInt("1", 2));// 1
+
+    // 测试位掩码
+    // const flag1 = 1;
+    // const flag2 = 2;
+    // const flag3 = 4;
+    // let mask = flag1 | flag2 | flag3;
+    // console.log("mask: ", mask); // 3
+    // console.log("mask & flag1:  ", mask & flag1); // 1
+    // console.log("mask & flag2:  ", mask & flag2); // 2
+    // console.log("mask & flag3:  ", mask & flag3); // 4
+
+    //
+    // const mask0 = parseInt("00000001", 2);
+    // const mask1 = parseInt("00000010", 2);
+    // const mask2 = parseInt("00000100", 2);
+    // const mask3 = parseInt("00001000", 2);
+    // const mask4 = parseInt("00010000", 2);
+    // const mask5 = parseInt("00100000", 2);
+    // const mask6 = parseInt("01000000", 2);
+    // const mask7 = parseInt("10000000", 2);
+    // let valueFlags = 1;
+    // // console.assert(xxx); 断言结果为true时不会输出任何结果
+    // console.assert(valueFlags & mask0); //
+
+    // valueFlags |= mask0 | mask1; // valueFlags = valueFlags | (mask0 | mask1)
+    // console.assert(valueFlags & mask0 && valueFlags & mask1);
+
+    // valueFlags |= mask7; // valueFlags = valueFlags | mask7
+    // console.assert(valueFlags & mask7);
+    // console.assert(valueFlags & mask0 && valueFlags & mask1);
+
+    // valueFlags &= ~mask1;
+    // console.assert(!(valueFlags & mask1));
+    // console.log(valueFlags ^ mask1);
   },
   methods: {
     getContainer() {
