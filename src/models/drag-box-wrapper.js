@@ -67,5 +67,7 @@ export class DragBoxWrapper extends Logger{
         this.log('onResize', 'event', e);
 
     }
-
+    log(...args) {
+      console.log(...args);
+    }
 }

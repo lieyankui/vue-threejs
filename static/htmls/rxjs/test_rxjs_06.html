@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Complete</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        overflow: auto;
+        padding: 10px;
+      }
+      .my-input-wrapper {
+        position: relative;
+        display: inline-block;
+        border: 1px solid #e6e6e6;
+        border-radius: 5px;
+        padding: 0px 8px;
+        height: 32px;
+      }
+      input.my-input-content {
+        border: none;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        line-height: 22px;
+      }
+      input.my-input-content::placeholder {
+        color: #aaa;
+      }
+      .my-input-popover {
+        position: absolute;
+        display: none;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        padding-top: 10px;
+        background-color: transparent;
+
+        /* height: 40px; */
+      }
+      .my-input-popover-inner {
+        border-radius: 10px;
+        box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+        max-height: 300px;
+        overflow: auto;
+        padding: 10px;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="my-input-wrapper">
+      <input class="my-input-content" type="text" placeholder="请输入..." />
+      <div class="my-input-popover">
+        <div class="my-input-popover-inner"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+    <script>
+      const {
+        map,
+        takeUntil,
+        take,
+        concatAll,
+        switchAll,
+        mergeAll,
+        filter,
+        withLatestFrom,
+        mapTo,
+        scan,
+        startWith,
+        catchError,
+        concatMap,
+        debounceTime,
+      } = rxjs.operators;
+      const { fromEvent, merge, empty, from, of, interval } = rxjs;
+      const input = document.querySelector(".my-input-content");
+      const popover = document.querySelector(".my-input-popover");
+      const inputEvent = fromEvent(input, "input");
+      const blurEvent = fromEvent(input, "blur");
+      const focusEvent = fromEvent(input, "focus");
+      blurEvent.subscribe(() => {
+          hide(popover);
+      });
+      focusEvent.subscribe(() => {
+          show(popover);
+      });
+      inputEvent
+        .pipe(
+          debounceTime(300),
+          filter((e) => !!e.target.value),
+          map((e) => e.target.value)
+        )
+        .subscribe((res) => {
+          show(popover);
+        });
+
+      function show(ele) {
+        if (!ele || !ele.appendChild) return;
+        if (ele.style.display !== "block") {
+            ele.style.display = "block";
+        }
+      }
+      function hide(ele) {
+        if (!ele || !ele.appendChild) return;
+        if (ele.style.display !== "none") {
+            ele.style.display = "none";
+        }
+      }
+      function createOptionsList(
+        datas,
+        labelField = label,
+        valueField = value
+      ) {
+        if (arrayIsEmpty(datas)) return;
+        const fragment = $createFragment();
+        const ul = $create("ul", "");
+
+        datas.forEach((data, index, list) => {
+          const li = $create("li", "");
+        });
+
+        fragment.appendChild;
+      }
+      function $createFragment() {
+        return document.createDocumentFragment();
+      }
+      function $create(type, clsName) {
+        const ele = document.createElement(type);
+        ele.className = clsName;
+        return ele;
+      }
+      function arrayIsEmpty(obj) {
+        return !Array.isArray(obj) || !obj.length;
+      }
+    </script>
+  </body>
+</html>

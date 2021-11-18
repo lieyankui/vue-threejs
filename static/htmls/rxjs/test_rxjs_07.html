@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>window, groupBy</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+    <script>
+      const {
+        map,
+        takeUntil,
+        take,
+        concatAll,
+        switchAll,
+        mergeAll,
+        filter,
+        withLatestFrom,
+        mapTo,
+        scan,
+        reduce,
+        startWith,
+        catchError,
+        concatMap,
+        mergeMap,
+        debounceTime,
+        windowToggle,
+        groupBy,
+        count,
+      } = rxjs.operators;
+      const { fromEvent, merge, empty, from, of, interval } = rxjs;
+      // 测试 window ---------------------- start --------------------------
+      //   const click = fromEvent(document, "click");
+      //   const source = interval(1000);
+      //   const example = click.pipe(rxjs.operators.window(source));
+
+      //   example
+      //     .pipe(
+      //       map((innerObservable) => innerObservable.pipe(count())),
+      //       switchAll()
+      //     )
+      //     .subscribe((res) => {
+      //       console.log("res: ", res);
+      //     });
+      // 测试 window ---------------------- end --------------------------
+
+      // 测试 windowToggle ---------------------- start --------------------------
+      // 鼠标按下开始打印  鼠标抬起结束打印
+      //   const mouseDown = fromEvent(document, "mousedown");
+      //   const mouseUp = fromEvent(document, "mouseup");
+      //   const source = interval(1000);
+      //   const example = source.pipe(windowToggle(mouseDown, () => mouseUp));
+
+      //   example
+      //     .pipe(
+      //       switchAll()
+      //     )
+      //     .subscribe((res) => {
+      //       console.log("res: ", res);
+      //     });
+      // 测试 windowToggle ---------------------- end --------------------------
+
+      // 测试 groupBy ---------------------- start --------------------------
+      const peopleList = [
+        { name: "Bob", score: 100, subject: "English" },
+        { name: "Bob", score: 90, subject: "Math" },
+        { name: "Bob", score: 96, subject: "Chinese" },
+        { name: "Jerry", score: 80, subject: "English" },
+        { name: "Jerry", score: 100, subject: "Math" },
+        { name: "Jerry", score: 90, subject: "Chinese" },
+      ];
+      const source = from(peopleList);
+      const example = source
+        .pipe(
+          groupBy((p) => p.name),
+          mergeMap((group) =>
+            group.pipe(
+              reduce((acc, curr) => ({
+                name: curr.name,
+                score: curr.score + acc.score,
+              }))
+            )
+          )
+        )
+        .subscribe((res) => {
+          console.log("res: ", res);
+        });
+      // 测试 groupBy ---------------------- end --------------------------
+    </script>
+  </body>
+</html>

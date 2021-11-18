@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      div.wrapper {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        background-color: skyblue;
+        box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.5);
+        text-align: center;
+        margin: 20px auto;
+      }
+
+      div.btn-wrapper {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper" id="state"></div>
+    <div class="btn-wrapper">
+      <button id="addButton">+</button>
+      <button id="minusButton">-</button>
+    </div>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+
+    <script>
+      const {
+        map,
+        takeUntil,
+        concatAll,
+        filter,
+        withLatestFrom,
+        mapTo,
+        scan,
+        startWith,
+      } = rxjs.operators;
+      const { fromEvent, merge, empty } = rxjs;
+      const addButton = document.getElementById("addButton");
+      const minusButton = document.getElementById("minusButton");
+      const state = document.getElementById("state");
+
+      const addClick = fromEvent(addButton, "click").pipe(mapTo(1));
+      const minusClick = fromEvent(minusButton, "click").pipe(mapTo(-1));
+
+      const numberState = merge(addClick, minusClick).pipe(
+        startWith(0),
+        scan((origin, next) => origin + next, 0)
+      );
+
+      numberState.subscribe((res) => {
+          console.log('res', res);
+        state.innerHTML = res;
+      });
+    </script>
+  </body>
+</html>

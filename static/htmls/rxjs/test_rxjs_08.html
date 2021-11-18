@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Observable</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+    <script>
+      //   const {
+      //     map,
+      //     takeUntil,
+      //     take,
+      //     concatAll,
+      //     switchAll,
+      //     mergeAll,
+      //     filter,
+      //     withLatestFrom,
+      //     mapTo,
+      //     scan,
+      //     reduce,
+      //     startWith,
+      //     catchError,
+      //     concatMap,
+      //     mergeMap,
+      //     debounceTime,
+      //     windowToggle,
+      //     groupBy,
+      //     count,
+      //   } = rxjs.operators;
+      //   const { fromEvent, merge, empty, from, of, interval } = rxjs;
+
+      const emptyObserver = {
+        next: () => {},
+        error: (err) => {
+          throw err;
+        },
+        complete: () => {},
+      };
+      class Observer {
+        isStopped = false;
+        destination = null;
+        constructor(destinationOrNext, error, complete) {
+          switch (arguments.length) {
+            case 0:
+              this.destination = this.safeObserver(emptyObserver);
+              break;
+            case 1:
+              if (!destinationOrNext) {
+                this.destination = this.safeObserver(emptyObserver);
+                break;
+              }
+              if (destinationOrNext instanceof Observer) {
+                this.destination = destinationOrNext;
+                break;
+              }
+              if (typeof destinationOrNext === "object") {
+                this.destination = this.safeObserver(destinationOrNext);
+                break;
+              }
+            default:
+              this.destination = this.safeObserver(
+                destinationOrNext,
+                error,
+                complete
+              );
+              break;
+          }
+        }
+
+        safeObserver(observerOrNext, error, complete) {
+          let next;
+          if (typeof observerOrNext === "function") {
+            next = observerOrNext;
+          } else if (observerOrNext) {
+            next = observerOrNext.next || (() => {});
+            error =
+              observerOrNext.error ||
+              function (err) {
+                throw err;
+              };
+            complete = observerOrNext.complete || (() => {});
+          }
+
+          return {
+            next,
+            complete,
+            error,
+          };
+        }
+
+        next(value) {
+          if (!this.isStopped && this.next) {
+            try {
+              this.destination.next(value);
+            } catch (error) {
+              this.destination.error(error);
+              this.unsubscribe();
+              throw error;
+            }
+          }
+        }
+
+        complete(value) {
+          if (!this.isStopped && this.complete) {
+            try {
+              this.destination.complete(value);
+            } catch (error) {
+              this.unsubscribe();
+              throw error;
+            }
+            this.unsubscribe();
+          }
+        }
+
+        error(err) {
+          if (!this.isStopped && this.error) {
+            try {
+              this.destination.error(err);
+            } catch (error) {
+              this.unsubscribe();
+              throw error;
+            }
+            this.unsubscribe();
+          }
+        }
+
+        unsubscribe() {
+          this.isStopped = true;
+        }
+      }
+
+      class MapObserver {
+        constructor(observer, callback) {
+          super(observer);
+          this.callback = callback;
+          this.next = this.next.bind(this);
+        }
+
+        next(value) {
+          if (!this.isStopped && this.next) {
+            try {
+              this.destination.next(this.callback(value));
+            } catch (error) {
+              this.unsubscribe();
+              this.destination.error(error);
+              return;
+            }
+          }
+        }
+      }
+
+      class Observable {
+        constructor(subscribe) {
+          if (subscribe) {
+            this._subscribe = subscribe;
+          }
+        }
+
+        subscribe() {
+          const realObserver = new Observer(...arguments);
+          if (this.operator) {
+            this.operator.call(realObserver, this.source);
+          } else {
+            this._subscribe(realObserver);
+          }
+          return realObserver;
+        }
+
+        map(callback) {
+          const observable = new Observable();
+          observable.source = this;
+          observable.operator = {
+            call: (observer, source) => {
+              const newObserver = new MapObserver(observer, source);
+               return source.subscribe(newObserver);
+            },
+          };
+          return observable;
+        }
+      }
+
+      Observable.create = function (subscribe) {
+        return new Observable(subscribe);
+      };
+
+      Observable.formArray = function (array) {
+        if (!Array.isArray(array)) {
+          throw new Error("params need to be an array");
+        }
+        return new Observable(function (observer) {
+          try {
+            array.forEach((data) => observer.next(data));
+            observer.complete();
+          } catch (error) {
+            observer.error(error);
+          }
+        });
+      };
+
+      const observable = Observable.create(function (observer) {
+        observer.next(1);
+        observer.next(2);
+        // observer.error("err");
+        observer.complete("finshed");
+        observer.next(3);
+      });
+
+      const arrObservable = Observable.formArray(["a", "b", "c"]);
+      arrObservable.subscribe(
+        (item) => {
+          if (item === "b") throw new Error("The item is B");
+          console.log("array item: ", item);
+        },
+        (err) => {
+          console.log("err message: ", err.message);
+          console.log("err name: ", err.name);
+          console.log("err stack: ", err.stack);
+        }
+      );
+
+      observable.map(v => v + "dddd").subscribe({
+        next: function (str) {
+          console.log("next str: ", str);
+        },
+        complete: function (str) {
+          console.log("complete str: ", str);
+        },
+        error: function (err) {
+          console.log("err err: ", err);
+        },
+      });
+
+      function create(subscriber) {
+        const observable = {
+          subscribe: function (observableOrNext, error, complete) {
+            const observer = new Observer(observableOrNext, error, complete);
+            subscriber(observer);
+            return observer;
+          },
+        };
+        return observable;
+      }
+    </script>
+  </body>
+</html>

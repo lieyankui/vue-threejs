@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完整拖拉应用</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        overflow: auto;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .video-wrapper {
+        position: relative;
+        width: 800px;
+        height: 500px;
+        padding: 20px;
+        margin: 0 auto;
+        border: 1px solid #e6e6e6;
+        border-radius: 20px;
+      }
+      .video {
+        width: 100%;
+        height: 100%;
+        background-color: skyblue;
+        /* transform: translate(-50%, -50%); */
+      }
+      .video.video-fixed {
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+        width: 500px;
+        height: 300px;
+        box-shadow: 0 0 10px 2px #aaa;
+        border-radius: 8px;
+      }
+
+      /* .anchor {
+            display: none;
+        } */
+
+      h1,
+      p {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>测试拖拽完整应用</h1>
+    <!-- <a id="videoAnchor" class="anchor" href="javascript: void(0);"></a> -->
+    <div id="video" class="video-wrapper">
+      <div class="video"></div>
+    </div>
+    <p>
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+      dwaaadawdawdawdasdwdsdwdsdadaswsadwsadwsadwsadwwsadwwsadwsadwsadwsadwsad<br />
+    </p>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+
+    <script>
+      const { map, takeUntil, concatAll, filter, withLatestFrom } =
+        rxjs.operators;
+      const { fromEvent } = rxjs;
+      const video = document.querySelector(".video");
+      // console.log('getBoundingClientRect: ', video.getBoundingClientRect());
+      const anchor = document.querySelector(".video-wrapper");
+
+      addScrollEvent(document).subscribe((flag) => {
+        flag
+          ? video.classList.add("video-fixed")
+          : video.classList.remove("video-fixed");
+      });
+
+      const mouseDown = fromEvent(video, "mousedown");
+      const mouseMove = fromEvent(document, "mousemove");
+      const mouseUp = fromEvent(document, "mouseup");
+      const valueHandler = (val, max, min = 0) => {
+        return Math.min(Math.max(val, min), max);
+      };
+      mouseDown
+        .pipe(
+          filter((e) => video.classList.contains("video-fixed")),
+          map((e) => mouseMove.pipe(takeUntil(mouseUp)))
+        )
+        .pipe(
+          concatAll(),
+          withLatestFrom(mouseDown, (move, down) => {
+            // console.log(document.body.clientHeight - video.clientHeight);
+            return {
+              x: valueHandler(
+                move.clientX - down.offsetX,
+                document.body.clientWidth - video.clientWidth
+              ),
+              y: valueHandler(
+                move.clientY - down.offsetY,
+                document.body.clientHeight - video.clientHeight
+              ),
+            };
+          })
+        )
+        .subscribe((pos) => {
+          video.style.left = pos.x + "px";
+          video.style.top = pos.y + "px";
+        });
+
+      function addScrollEvent(ele) {
+        return fromEvent(document, "scroll").pipe(
+          map((e) => anchor.getBoundingClientRect().bottom < 0)
+        );
+      }
+    </script>
+  </body>
+</html>

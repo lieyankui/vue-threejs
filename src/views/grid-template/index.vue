@@ -282,7 +282,7 @@ export default {
     };
   },
   mounted() {
-    const wrapper = new DragBoxWrapper(this.getContainer);
+    // const wrapper = new DragBoxWrapper(this.getContainer);
     // const array = ['1', '2', '3'].map(parseInt);
     // console.log('array', array);
     // console.log('parseInt("2", 1)', parseInt("2", 1));// NaN

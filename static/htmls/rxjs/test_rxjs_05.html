@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> concatAll, switchAll, mergeAll </title>
+</head>
+<body>
+    <button id="test">测试</button>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+    <script>
+      const {
+        map,
+        takeUntil,
+        take,
+        concatAll,
+        switchAll,
+        mergeAll,
+        filter,
+        withLatestFrom,
+        mapTo,
+        scan,
+        startWith,
+        catchError,
+        concatMap
+      } = rxjs.operators;
+      const { fromEvent, merge, empty, from, of, interval } = rxjs;
+
+      const button = document.getElementById("test");
+      const btnClick = fromEvent(button, 'click');
+      const example = btnClick.pipe(
+          map(e => interval(1000).pipe(take(3))),
+        //   concatAll(), // 等待上一个observable所有动作完成后，下一个observable开始执行
+        //   switchAll(), // 终止上一个observable的执行，开始当前observable的执行
+        mergeAll(), // 多个observable同时执行
+      );
+
+      example.subscribe(res => {
+          console.log(res);
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>catch</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+    <script>
+      const {
+        map,
+        takeUntil,
+        concatAll,
+        filter,
+        withLatestFrom,
+        mapTo,
+        scan,
+        startWith,
+        catchError,
+      } = rxjs.operators;
+      const { fromEvent, merge, empty, from, of } = rxjs;
+
+      const source = from(['a', 'b', 'c', 1, 'd']);
+      source.pipe(
+        map(res => res.toUpperCase()),
+        catchError(err => of(`Catch Error: ${err}`))
+      ).subscribe(res => {
+          console.log('res: ', res);
+      });
+      /**
+       * res:  A
+       * res:  B
+       * res:  C
+       * res:  Catch Error: TypeError: res.toUpperCase is not a function
+      */
+
+    </script>
+  </body>
+</html>
