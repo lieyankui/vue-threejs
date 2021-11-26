@@ -7,23 +7,29 @@ export default {
       canvasRef: "canvasRef",
       $subscribe: null,
       $resizeSub: null,
+      gl: null,
+      program: null,
     };
   },
   mounted() {
     this.$subscribe = fromEvent(window, "resize")
       .pipe(
-        startWith(0),
+        startWith(true),
         debounceTime(200),
       )
-      .subscribe(() => {
-        this.onResize && this.onResize();
+      .subscribe((e) => {
+        let initFlag = false;
+        if(e === true) {
+          initFlag = true;
+        }
+        this.onResize && this.onResize(initFlag);
       });
   },
 
   methods: {
-    onResize() {
+    onResize(initFlag) {
       this.$resizeSub = this.initSize().subscribe((res) => {
-        this.onAfterResize && this.onAfterResize(res);
+        this.onAfterResize && this.onAfterResize(res, initFlag);
       });
     },
     initSize() {

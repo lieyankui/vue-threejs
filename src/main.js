@@ -7,6 +7,7 @@ import '@/styles/base.scss';
 import 'normalize.css/normalize.css';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
+import '@/components';
 
 
 Vue.prototype.$three = THREE;
