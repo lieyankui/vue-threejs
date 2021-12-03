@@ -261,7 +261,6 @@ export default {
       const scaleMatrix = m3.scaling(this.scaleX, this.scaleY);
       // 定义初始矩阵
       let matrix = m3.translation(this.width / 2 + 100, this.height / 2 + 100);
-      // 创建一个矩阵 将原点移动到F的中心
       for (let i = 0; i < 5; i++) {
         // 设置颜色
         gl.uniform4f(
@@ -271,10 +270,16 @@ export default {
           this.colorArr[i][2] / 255,
           1
         );
+        // 创建一个矩阵 将原点移动到F的中心
+        const moveOriginMatrix = m3.translation(
+          i === 0 ? -50 : 50,
+          i === 0 ? -60 : 60
+        );
         // 矩阵相乘
         matrix = m3.multiply(matrix, translationMatrix);
         matrix = m3.multiply(matrix, rotationMatrix);
         matrix = m3.multiply(matrix, scaleMatrix);
+        matrix = m3.multiply(matrix, moveOriginMatrix);
         // 设置矩阵
         gl.uniformMatrix3fv(this.matrixLocation, false, matrix);
         // 绘制图形

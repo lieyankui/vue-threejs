@@ -29,11 +29,9 @@ export default {
       currNavItem: null,
     };
   },
-
   mounted() {
     this.navItemClicked(this.compArr[0]);
   },
-
   methods: {
     navItemClicked(item) {
       if (this.currNavItem === item) return;

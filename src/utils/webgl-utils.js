@@ -61,9 +61,69 @@ export function clearDraw(gl) {
 export function randomInt(range = 800) {
   return Math.floor(Math.random() * range);
 }
+/**
+ *
+ * @param {WebGLRenderingContext} gl
+ * @param {buffer数据} data
+ * @returns buffer对象
+ *
+ */
+export function createBuffer(gl, datas) {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(datas), gl.STATIC_DRAW);
+  return buffer;
+}
+/**
+ * 加载一些图像用于纹理
+ * 创建一个纹理信息 {width: w, height: h, texture: tex}
+ * 纹理起初为 1 * 1 像素，当图像加载完成后更新大小
+ */
+/** @param {WebGLRenderingContext} gl */
+export function loadImageAndCreateTextureInfo(gl, url) {
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  // 用 1*1 蓝色像素填充纹理
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    1,
+    1,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    new Uint8Array([0, 0, 255, 255])
+  );
+  // 让我们假设所有图片不是2的幂
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
+  const textureInfo = {
+    width: 1,
+    height: 1,
+    texture: tex
+  };
+
+  const img = new Image();
+  img.addEventListener("load", () => {
+    textureInfo.width = img.width;
+    textureInfo.height = img.height;
+
+    gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  });
+  img.src = url;
+  return textureInfo;
+}
 // 求平面中一点绕任意点旋转 θ 度后的坐标点
-export function getRotatedPosition(point, angle, origin = { x: 0, y: 0 }, arrayFlag = false) {
+export function getRotatedPosition(
+  point,
+  angle,
+  origin = { x: 0, y: 0 },
+  arrayFlag = false
+) {
   if (!point) return { x: 0, y: 0 };
   const radian = convert2radian(angle);
   const pointX = parseFloat(point.x);
@@ -82,10 +142,10 @@ export function getRotatedPosition(point, angle, origin = { x: 0, y: 0 }, arrayF
 }
 // 角度转弧度
 export function convert2radian(angle) {
-  return parseFloat(angle) * Math.PI / 180;
+  return (parseFloat(angle) * Math.PI) / 180;
 }
 // 大于最大取最大， 小于最小取最小
-export function getAvailableVal(val, min = 0, max = 100,) {
+export function getAvailableVal(val, min = 0, max = 100) {
   return Math.max(min, Math.min(val, max));
 }
 // 用参数生成矩形顶点并写进缓冲

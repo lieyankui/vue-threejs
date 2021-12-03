@@ -95,8 +95,10 @@ export default {
       isInputMode: false,
     };
   },
-  created() {},
-  mounted() {},
+  async created() {
+  },
+  mounted() {
+  },
 
   methods: {
     changeMode() {

@@ -1,5 +1,5 @@
 export default [
-    {text: 'TlGridTemplate', compPath: 'grid-template/index', code: 'TlGridTemplate'},
+    // {text: 'TlGridTemplate', compPath: 'grid-template/index', code: 'TlGridTemplate'},
     // {text: 'DragResizeBox', compPath: 'drag-box/index', code: 'DragResizeBox'},
     // {text: 'Overlap', compPath: 'demo/overlap', code: 'Overlap'},
     // {text: 'Cherry Down', compPath: 'demo/cherry-down', code: 'CherryDown'},
@@ -22,4 +22,8 @@ export default [
     {text: 'webgl test_08', compPath: 'webgl/test_08', code: 'webgl_test_08'},
     {text: 'webgl test_09', compPath: 'webgl/test_09', code: 'webgl_test_09'},
     {text: 'webgl test_10', compPath: 'webgl/test_10', code: 'webgl_test_10'},
+    {text: 'webgl test_11', compPath: 'webgl/test_11', code: 'webgl_test_11'},
+    {text: 'webgl test_12', compPath: 'webgl/test_12', code: 'webgl_test_12'},
+    {text: 'webgl test_13', compPath: 'webgl/test_13', code: 'webgl_test_13'},
+    {text: 'webgl test_14', compPath: 'webgl/test_14', code: 'webgl_test_14'},
 ];

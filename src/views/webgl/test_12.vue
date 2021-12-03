@@ -100,8 +100,8 @@ export default {
       positionBuffer: null,
       animationFrameId: null,
       sliderDatas: [
-        { value: 0, min: 0, max: 1200, label: "x" },
-        { value: 0, min: 0, max: 580, label: "y" },
+        { value: 200, min: 0, max: 1200, label: "x" },
+        { value: 200, min: 0, max: 580, label: "y" },
       ],
       rotationDatas: [{ value: 0, min: 0, max: 360, label: "r" }],
       scaleDatas: [
@@ -135,20 +135,10 @@ export default {
       const vertexShaderSource = `
         // 一个属性值，将会从缓冲中获取数据
         attribute vec2 a_position;
-        // 定义全局变量 u_resolution  resolution 意思为：分辨率
-        uniform vec2 u_resolution;
         // 定义全局变量 u_matrix;
         uniform mat3 u_matrix;
         void main() {
-          vec2 position = (u_matrix * vec3(a_position, 1)).xy;
-          // 把分辨率位置坐标转化为裁剪空间坐标数据
-          // 当前位置所在的分辨率 / 屏幕总分辨率  得出 相对于屏幕总范围为 1 时，当前位置的坐标
-          vec2 zeroToOne = position / u_resolution;
-          // 因为裁剪空间坐标的总范围为 2 ，所以需要把相对于屏幕总范围为 1 时的坐标 * 2
-          vec2 zeroToTwo = zeroToOne * 2.0;
-          // 又因为裁剪空间的坐标为 -1 - 1 所以 再把结果减去 1 就转换为裁剪空间的坐标
-          vec2 clipSpace = zeroToTwo - 1.0;
-          gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+          gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
         }
       `;
 
@@ -176,11 +166,6 @@ export default {
       this.positionAttributeLocation = gl.getAttribLocation(
         program,
         "a_position"
-      );
-      // 找到全局变量 u_resolution 的位置
-      this.resolutionUniformLocation = gl.getUniformLocation(
-        program,
-        "u_resolution"
       );
       // 找到全局变量 u_color 的位置
       this.colorUniformLocation = gl.getUniformLocation(program, "u_color");
@@ -236,11 +221,6 @@ export default {
         stride,
         offset
       );
-      gl.uniform2f(
-        this.resolutionUniformLocation,
-        gl.canvas.width,
-        gl.canvas.height
-      );
       gl.uniform4f(
         this.colorUniformLocation,
         this.colorArr[1][0] / 255,
@@ -253,34 +233,35 @@ export default {
       const offset1 = 0;
       const count = 18;
       // 计算矩阵
+      const projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height);
       const translationMatrix = m3.translation(
-        this.translationArr[0],
-        this.translationArr[1]
+        this.translationArr[0] + this.width / 2,
+        this.translationArr[1] + this.height / 2
       );
       const rotationMatrix = m3.rotation(m3.degToRad(this.rotateAngle));
       const scaleMatrix = m3.scaling(this.scaleX, this.scaleY);
+      const moveOriginMatrix = m3.translation(-this.width / 2, -this.height /2);
       // 定义初始矩阵
-      let matrix = m3.translation(this.width / 2 + 100, this.height / 2 + 100);
+      let matrix = m3.identity();
+      // 设置颜色
+      gl.uniform4f(
+        this.colorUniformLocation,
+        this.colorArr[0][0] / 255,
+        this.colorArr[0][1] / 255,
+        this.colorArr[0][2] / 255,
+        1
+      );
       // 创建一个矩阵 将原点移动到F的中心
-      for (let i = 0; i < 5; i++) {
-        // 设置颜色
-        gl.uniform4f(
-          this.colorUniformLocation,
-          this.colorArr[i][0] / 255,
-          this.colorArr[i][1] / 255,
-          this.colorArr[i][2] / 255,
-          1
-        );
-        // 矩阵相乘
-        matrix = m3.multiply(matrix, translationMatrix);
-        matrix = m3.multiply(matrix, rotationMatrix);
-        matrix = m3.multiply(matrix, scaleMatrix);
-        // 设置矩阵
-        gl.uniformMatrix3fv(this.matrixLocation, false, matrix);
-        // 绘制图形
+      matrix = m3.multiply(matrix, projectionMatrix);
+      matrix = m3.multiply(matrix, translationMatrix);
+      matrix = m3.multiply(matrix, rotationMatrix);
+      matrix = m3.multiply(matrix, scaleMatrix);
+      matrix = m3.multiply(matrix, moveOriginMatrix);
 
-        gl.drawArrays(primitiveType, offset1, count);
-      }
+      // 设置矩阵
+      gl.uniformMatrix3fv(this.matrixLocation, false, matrix);
+      // 绘制图形
+      gl.drawArrays(primitiveType, offset1, count);
     },
     cancelAnimationFrame() {
       if (!this.animationFrameId) return;
