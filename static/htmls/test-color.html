@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      .container {
+        width: 80%;
+        height: 100%;
+        min-width: 1200px;
+        margin: auto;
+        padding: 10px;
+        background: floralwhite;
+      }
+      .row {
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+      }
+      .row > *:not(:last-child) {
+        display: inline-block;
+        margin-right: 15px;
+      }
+
+      .box {
+        width: 400px;
+        height: 200px;
+        margin: 50px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <span class="label">颜色1:</span>
+        <span class="control">
+          <input type="color" name="origin1" />
+        </span>
+        <span class="label">颜色2:</span>
+        <span class="control">
+          <input type="color" name="origin2" />
+        </span>
+        <button id="mixBtn">混合</button>
+        <button id="mixBtn2">混合2</button>
+      </div>
+      <div class="box" id="rsltBox" style="background: #fff"></div>
+    </div>
+    <script>
+      window.onload = function () {
+        const mixBtn = $("#mixBtn");
+        const mixBtn2 = $("#mixBtn2");
+
+        const colorCtrl1 = $('[name="origin1"]');
+        const colorCtrl2 = $('[name="origin2"]');
+        mixBtn.addEventListener("click", function (e) {
+          mix();
+        });
+        mixBtn2.addEventListener("click", function (e) {
+          mix(true);
+        });
+
+        function mix(flag) {
+          let color1 = colorCtrl1.value
+            .substr(1)
+            .replace(/(.{2})/g, "$1|")
+            .replace(/\|$/, "")
+            .split("|");
+          let color2 = colorCtrl2.value
+            .substr(1)
+            .replace(/(.{2})/g, "$1|")
+            .replace(/\|$/, "")
+            .split("|");
+          const newColor = [];
+          color1.forEach((item, index) => {
+            const base = parseInt(item, 16);
+            const add = parseInt(color2[index], 16);
+            if (flag) {
+              newColor.push(Math.floor(base + (base * add) / (255 - add)));
+            } else {
+              newColor.push(
+                Math.floor(
+                  (parseInt(item, 16) + parseInt(color2[index], 16)) / 2
+                )
+              );
+            }
+          });
+          $(
+            "#rsltBox"
+          ).style.background = `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`;
+        }
+
+        function $(selector) {
+          return document.querySelector(selector);
+        }
+      };
+    </script>
+  </body>
+</html>

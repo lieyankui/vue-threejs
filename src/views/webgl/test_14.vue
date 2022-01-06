@@ -94,6 +94,19 @@ export default {
       drawInfos: [],
       then: 0,
       speed: 60,
+      maxWidth: 200,
+      maxHeight: 150,
+      imgArr: [
+        { url: "static/imgs/123.jpg" },
+        { url: "static/imgs/148.jpg" },
+        { url: "static/imgs/158.jpg" },
+      ],
+      imgConfig: {
+        width: 200,
+        height: 150,
+        maxWidth: 200,
+        maxHeight: 150,
+      },
     };
   },
 
@@ -103,7 +116,6 @@ export default {
   methods: {
     // 加载
     initLoad() {
-      console.log("initLoad start......");
       const canvas = this.getCanvas();
       const gl = (this.gl = canvas.getContext("webgl"));
       // 定点着色器源码
@@ -142,14 +154,8 @@ export default {
         fragShaderSource
       ));
 
-      this.positionLocation = gl.getAttribLocation(
-        program,
-        "a_position"
-      );
-      this.texcoordLocation = gl.getAttribLocation(
-        program,
-        "a_texcoord"
-      );
+      this.positionLocation = gl.getAttribLocation(program, "a_position");
+      this.texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
       this.matrixLocation = gl.getUniformLocation(program, "u_matrix");
       this.textureLocation = gl.getUniformLocation(program, "u_texture");
 
@@ -159,53 +165,44 @@ export default {
       const texcoords = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];
       this.texcoordBuffer = createBuffer(gl, texcoords);
 
-      this.textureInfos.push(
-        loadImageAndCreateTextureInfo(gl, "static/imgs/123.jpg")
+      this.imgArr.forEach((img) =>
+        this.textureInfos.push(
+          loadImageAndCreateTextureInfo(gl, img.url, this.imgConfig)
+        )
       );
-      this.textureInfos.push(
-        loadImageAndCreateTextureInfo(gl, "static/imgs/158.jpg")
-      );
-      this.textureInfos.push(
-        loadImageAndCreateTextureInfo(gl, "static/imgs/148.jpg")
-      );
-      const numToDraw = 9;
+      const numToDraw = 4;
       for (let i = 0; i < numToDraw; i++) {
-        const x = Math.random() * gl.canvas.width;
-        const y = Math.random() * gl.canvas.height;
-        console.log('x:', x);
-        console.log('y:', y);
+        const textureInfo = this.textureInfos[i % this.imgArr.length];
+        const x = Math.random() * gl.canvas.width - textureInfo.width;
+        const y = Math.random() * gl.canvas.height - textureInfo.height;
         const drawInfo = {
           x: x,
           y: y,
           dx: Math.random() > 0.5 ? -1 : 1,
           dy: Math.random() > 0.5 ? -1 : 1,
-          textureInfo: this.textureInfos[Math.random() * this.textureInfos.length | 0]
+          textureInfo,
         };
         this.drawInfos.push(drawInfo);
       }
-      console.log(this.drawInfos);
       this.render();
-      console.log("initLoad end......");
     },
     update(deltaTime) {
       const gl = this.gl;
       const drawInfos = this.drawInfos;
       const speed = this.speed;
-      drawInfos.forEach(drawInfo => {
-        // console.log('drawInfo.x:', drawInfo.x);
-        // console.log('drawInfo.y:', drawInfo.y);
+      drawInfos.forEach((drawInfo) => {
         drawInfo.x += drawInfo.dx * speed * deltaTime;
         drawInfo.y += drawInfo.dy * speed * deltaTime;
-        if(drawInfo.x < 0){
+        if (drawInfo.x < 0) {
           drawInfo.dx = 1;
         }
-        if(drawInfo.x >= gl.canvas.width){
+        if (drawInfo.x >= gl.canvas.width - drawInfo.textureInfo.width) {
           drawInfo.dx = -1;
         }
-        if(drawInfo.y < 0){
+        if (drawInfo.y < 0) {
           drawInfo.dy = 1;
         }
-        if(drawInfo.y >= gl.canvas.height){
+        if (drawInfo.y >= gl.canvas.height - drawInfo.textureInfo.height) {
           drawInfo.dy = -1;
         }
       });
@@ -225,24 +222,10 @@ export default {
       // 设置属性 从缓冲中提取数据
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(
-        positionLocation,
-        2,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
       gl.enableVertexAttribArray(texcoordLocation);
-      gl.vertexAttribPointer(
-        texcoordLocation,
-        2,
-        gl.FLOAT,
-        false,
-        0,
-        0
-      );
+      gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
       // 从像素空间转换到裁剪空间
       let matrix = m4.orthographic(
         0,
@@ -263,69 +246,18 @@ export default {
       // 绘制矩形
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     },
-    /**
-     * 加载一些图像用于纹理
-     * 创建一个纹理信息 {width: w, height: h, texture: tex}
-     * 纹理起初为 1 * 1 像素，当图像加载完成后更新大小
-     */
-    loadImageAndCreateTextureInfo(url) {
-      const gl = this.gl;
-      const tex = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texImage2D(
-        gl.TEXTURE_2D,
-        0,
-        gl.RGBA,
-        1,
-        1,
-        0,
-        gl.RGBA,
-        gl.UNSIGNED_BYTE,
-        new Uint8Array([0, 0, 255, 255])
-      );
-      // 假设所有的图像维度都不是2的整数次幂
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-      const textureInfo = {
-        width: 1,
-        height: 1,
-        texture: tex,
-      };
-      const img = new Image();
-      img.addEventListener("load", function () {
-        textureInfo.width = img.width;
-        textureInfo.height = img.height;
-
-        gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
-        gl.texImage2D(
-          gl.TEXTURE_2D,
-          0,
-          gl.RGBA,
-          gl.RGBA,
-          gl.UNSIGNED_BYTE,
-          img
-        );
-      });
-      img.src = url;
-      return textureInfo;
-    },
     // 重新加载
     render(time) {
-      // console.log("time:", time);
-      this.cancelAnimationFrame();
+      if (this.animationFrameId) {
+        this.cancelAnimationFrame();
+      }
+      time = time || performance.now();
       if (!this.gl) return;
       const now = time * 0.001;
       const deltaTime = Math.min(0.1, now - this.then);
-      if(isNaN(deltaTime)) {
-        console.log("time", time);
-        console.log("typeof time", typeof time);
-        console.log("now", now);
-        console.log("then", this.then);
-        throw Error('deltaTime is NaN');
+      if (isNaN(deltaTime)) {
+        throw Error("deltaTime is NaN");
       }
-      // console.log("deltaTime:", deltaTime);
       this.then = now;
       this.update(deltaTime);
 
@@ -334,14 +266,21 @@ export default {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       gl.clear(gl.COLOR_BUFFER_BIT);
 
-      drawInfos.forEach(drawInfo => {
-
+      drawInfos.forEach((drawInfo) => {
+        drawInfo.textureInfo.width = Math.min(
+          drawInfo.textureInfo.width,
+          this.maxWidth
+        );
+        drawInfo.textureInfo.height = Math.min(
+          drawInfo.textureInfo.height,
+          this.maxHeight
+        );
         this.drawImage(
           drawInfo.textureInfo.texture,
           drawInfo.textureInfo.width,
           drawInfo.textureInfo.height,
           drawInfo.x,
-          drawInfo.y,
+          drawInfo.y
         );
       });
       this.animationFrameId = window.requestAnimationFrame(this.render);

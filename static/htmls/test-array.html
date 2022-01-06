@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      window.onload = function () {
+        const arr = [
+          {
+            a: "a",
+            b: "b",
+            children: [
+              { a: "a1", b: "b1" },
+              { a: "a2", b: "b2" },
+              {
+                a: "a3",
+                b: "b3",
+                children: [
+                  { a: "a31", b: "b31" },
+                  { a: "a32", b: "b32" },
+                  { a: "a33", b: "b33" },
+                ]
+              },
+            ],
+          },
+          {
+            a: "c",
+            b: "d",
+            children: [
+              { a: "c1", b: "d1" },
+              { a: "c2", b: "d2" },
+              {
+                a: "c3",
+                b: "d3",
+                children: [
+                  { a: "c31", b: "d31" },
+                  { a: "c32", b: "d32" },
+                  { a: "c33", b: "d33" },
+                ]
+              },
+            ],
+          },
+        ];
+        const resultArr = arr.concatAll('children');
+        // const resultArr = ['a', 'b', ['c', 'd', 'e']].concatAll('children');
+        console.log('resultArr: ', resultArr);
+      };
+
+      Array.prototype.concatAll = function (field) {
+        let rslt = [];
+        this.forEach(item => {
+          let arr = [];
+          if(Array.isArray(item)) {
+            arr = item;
+          } else {
+            arr = item[field];
+            rslt.push(copy(item, [field]));
+          }
+          if(Array.isArray(arr) && arr.length){
+            rslt = rslt.concat(Array.prototype.concatAll.call(arr, field));
+          }
+        });
+        return rslt;
+      };
+      function copy(obj, skipFields) {
+        const rsltObj = {};
+        const flag = Array.isArray(skipFields) && skipFields.length;
+        for(let key in obj) {
+          if(!(flag && skipFields.includes(key))) {
+            rsltObj[key] = obj[key];
+          }
+        }
+        return rsltObj;
+      }
+    </script>
+  </body>
+</html

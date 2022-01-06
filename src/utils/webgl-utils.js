@@ -80,7 +80,15 @@ export function createBuffer(gl, datas) {
  * 纹理起初为 1 * 1 像素，当图像加载完成后更新大小
  */
 /** @param {WebGLRenderingContext} gl */
-export function loadImageAndCreateTextureInfo(gl, url) {
+const imgConfig = {
+  width: 120,
+  height: 80,
+  maxWidth: 99999,
+  maxHeight: 99999,
+};
+export function loadImageAndCreateTextureInfo(gl, url, config) {
+  config = { ...imgConfig, ...(config || {}) };
+  const { width, height, maxWidth, maxHeight } = config;
   const tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
   // 用 1*1 蓝色像素填充纹理
@@ -101,15 +109,17 @@ export function loadImageAndCreateTextureInfo(gl, url) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
   const textureInfo = {
-    width: 1,
-    height: 1,
-    texture: tex
+    width: Math.min(width, maxWidth),
+    height: Math.min(height, maxHeight),
+    texture: tex,
   };
 
   const img = new Image();
   img.addEventListener("load", () => {
-    textureInfo.width = img.width;
-    textureInfo.height = img.height;
+    textureInfo.width =
+      width === "auto" ? Math.min(img.width, maxWidth) : width;
+    textureInfo.height =
+      height === "auto" ? Math.min(img.height, maxHeight) : height;
 
     gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);

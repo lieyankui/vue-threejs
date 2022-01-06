@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      .container {
+        width: 100%;
+        height: 100%;
+        /* font-size: 20px; */
+        padding: 10px;
+      }
+      .row {
+        height: 400px;
+        background-color: skyblue;
+      }
+      .v-align {
+        position: absolute;
+        left: 50px;
+        top: 50px;
+        height: 260px;
+        width: 80%;
+        background: skyblue;
+        text-align: center;
+      }
+      .v-align::after {
+        content: "";
+        position: relative;
+        display: inline-block;
+        width: 0;
+        background-color: red;
+        height: 100%;
+        /* vertical-align: middle; */
+      }
+      .inline-block {
+        display: inline-block;
+        background: yellow;
+        padding: 10px;
+        /* vertical-align: middle; */
+      }
+      .inline {
+        background: greenyellow;
+        /* vertical-align: middle; */
+      }
+      .img {
+        width: 200px;
+        height: 150px;
+        vertical-align: middle;
+      }
+      #span1 {
+        line-height: 0px;
+        font-size: 16px;
+        height: auto;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+      [class^="fz-"] {
+        /* display: inline-block;
+        margin-left: 20px; */
+        /* border-bottom: 1px solid #e6e6e6; */
+      }
+      .fz-6 {
+        font-size: 6px;
+      }
+      .fz-7 {
+        font-size: 7px;
+      }
+      .fz-8 {
+        font-size: 8px;
+      }
+      .fz-9 {
+        font-size: 9px;
+      }
+      .fz-10 {
+        font-size: 10px;
+      }
+      .fz-11 {
+        font-size: 11px;
+      }
+      .fz-12 {
+        font-size: 12px;
+      }
+      .fz-13 {
+        font-size: 13px;
+      }
+      .fz-14 {
+        font-size: 14px;
+      }
+      .fz-15 {
+        font-size: 15px;
+      }
+      .fz-16 {
+        font-size: 16px;
+      }
+      .fz-17 {
+        font-size: 17px;
+      }
+      .fz-18 {
+        font-size: 18px;
+      }
+      .fz-19 {
+        font-size: 19px;
+      }
+      .fz-20 {
+        font-size: 20px;
+      }
+      .fz-21 {
+        font-size: 21px;
+      }
+      .fz-22 {
+        font-size: 22px;
+      }
+      .fz-23 {
+        font-size: 23px;
+      }
+      .fz-24 {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <span class="inline-block">xxxx</span>
+        <span class="inline">xxxx</span>xxxxx
+        <img src="../imgs/197.jpg" class="img" alt="图片正在加载。。。" />
+      </div>
+    </div>
+    <!-- <span class="span-item">
+      <span id="span1">xxxxxx</span> -->
+    <!-- <span class="label">a</span>
+      <span class="label">b</span>
+    </span>
+    <br /> -->
+
+    <!-- <div class="container">
+      <div class="fz-6">6</div>
+      <br />
+      <div class="fz-7">7</div>
+      <br />
+      <div class="fz-8">8</div>
+      <br />
+      <div class="fz-9">9</div>
+      <br />
+      <div class="fz-10">10</div>
+      <br />
+      <div class="fz-11">11</div>
+      <br />
+      <div class="fz-12">12</div>
+      <br />
+      <div class="fz-13">13</div>
+      <br />
+      <div class="fz-14">14</div>
+      <br />
+      <div class="fz-15">15</div>
+      <br />
+      <div class="fz-16">16</div>
+      <br />
+      <div class="fz-17">17</div>
+      <br />
+      <div class="fz-18">18</div>
+      <br />
+      <div class="fz-19">19</div>
+      <br />
+      <div class="fz-20">20</div>
+      <br />
+      <div class="fz-21">21</div>
+      <br />
+      <div class="fz-22">22</div>
+      <br />
+      <div class="fz-23">23</div>
+      <br />
+      <div class="fz-24">24TxPlThTj</div>
+    </div> -->
+    <!-- <img style="width: 80%;height: 100%;"></img> -->
+  </body>
+  <script>
+    window.onload = function () {
+      let elArr = document.querySelectorAll('[class^="fz-"]');
+      elArr.forEach((item) => {
+        logSizeInfo(item);
+      });
+    };
+
+    function $(selector) {
+      return document.querySelector(selector);
+    }
+
+    function logSizeInfo(el) {
+      console.log(
+        `fontSize: ${getStyle(el, "fontSize")}, height: ${el.clientHeight}`
+      );
+    }
+    //获取元素样式
+    function getStyle(obj, name) {
+      if (!name) {
+        return window.getComputedStyle
+          ? getComputedStyle(obj, null)
+          : obj.currentStyle;
+      }
+      return window.getComputedStyle
+        ? getComputedStyle(obj, null)[name]
+        : obj.currentStyle[name];
+    }
+  </script>
+</html>
