@@ -1,13 +1,13 @@
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const path = require("path");
+// const path = require("path");
 
-function resolve(url) {
-  return path.resolve(__dirname, url);
-}
+// function resolve(url) {
+//   return path.resolve(__dirname, url);
+// }
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/vue-three/" : "/",
-  outputDir: "vue-three",
+  publicPath: process.env.NODE_ENV === "production" ? "/vue-threejs/" : "/",
+  outputDir: "vue-threejs",
   assetsDir: "static",
   lintOnSave: false,
   configureWebpack: {

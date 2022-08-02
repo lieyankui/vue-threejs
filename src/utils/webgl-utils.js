@@ -39,7 +39,7 @@ export function loadShader(gl, type, source) {
   return shader;
 }
 // 创建缓冲区
-export function initBuffers(dataArr) {
+export function initBuffers(gl, positionBuffer, dataArr) {
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(dataArr), gl.SRATIC_DRAW);
