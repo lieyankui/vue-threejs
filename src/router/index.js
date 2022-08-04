@@ -1,42 +1,38 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { getRouterMode } from "../utils/env-util";
 
 Vue.use(VueRouter);
 
 const routes = [
-
   {
     path: "/threeJsDemo",
     name: "threeJsDemo",
-    component: () =>
-      import( "../views/three/index.vue"),
+    component: () => import("../views/three/index.vue"),
   },
   {
     path: "/dragBox",
     name: "dragBox",
-    component: () =>
-      import( "../views/grid-template/index.vue"),
+    component: () => import("../views/grid-template/index.vue"),
   },
   {
     path: "/demo",
     name: "demo",
-    component: () =>
-      import( "../views/index.vue"),
+    component: () => import("../views/index.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: () =>
-      import( "../views/login/index.vue"),
+    component: () => import("../views/login/index.vue"),
   },
   {
-    path: '',
-    redirect: 'threeJsDemo',
-  }
+    path: "",
+    redirect: "threeJsDemo",
+  },
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: getRouterMode(),
   base: process.env.BASE_URL,
   routes,
 });

@@ -7,24 +7,18 @@
 </template>
 
 <script>
-import {
-  concat,
-  concatAll,
-  fromEvent,
-  interval,
-  map,
-  of,
-  take,
-  takeLast,
-  takeUntil,
-} from "rxjs";
+import { map, concatAll, fromEvent, takeUntil } from "rxjs";
 export default {
   name: "my-login",
   computed: {
     formHeight() {
-      const ret = (this.$refs && this.$refs["loginRef"] && this.$refs["loginRef"].clientWidth) || 0;
+      const ret =
+        (this.$refs &&
+          this.$refs["loginRef"] &&
+          this.$refs["loginRef"].clientWidth) ||
+        0;
       return ret;
-    }
+    },
   },
   data() {
     return {
@@ -33,8 +27,11 @@ export default {
   },
   mounted() {
     // this.addDragEvent();
-    console.log('formHeight: ', this.formHeight);
-    console.log('this.$refs["loginRef"].clentHeight: ', this.$refs["loginRef"].clientWidth)
+    console.log("formHeight: ", this.formHeight);
+    console.log(
+      'this.$refs["loginRef"].clentHeight: ',
+      this.$refs["loginRef"].clientWidth
+    );
 
     //
     // const source = interval(500).pipe(take(3));
@@ -50,7 +47,7 @@ export default {
       const mouseMove = fromEvent(body, "mousemove");
       const mouseUp = fromEvent(body, "mouseup");
       mouseDown
-        .pipe(map((event) => mouseMove.pipe(takeUntil(mouseUp))))
+        .pipe(map(() => mouseMove.pipe(takeUntil(mouseUp))))
         .pipe(concatAll())
         .pipe(map((event) => ({ x: event.clientX, y: event.clientY })))
         .subscribe((pos) => {
@@ -65,7 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-wrapper {
-  // background-image: linear-gradient( 135deg, #C2FFD8 10%, #465EFB 100%);
+  background-image: linear-gradient(135deg, #c2ffd8 10%, #465efb 100%);
   position: relative;
 }
 .login-form {
