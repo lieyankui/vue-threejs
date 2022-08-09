@@ -26,8 +26,13 @@ const routes = [
     component: () => import("../views/login/index.vue"),
   },
   {
+    path: "/draw",
+    name: "draw",
+    component: () => import("../views/draw/index.vue"),
+  },
+  {
     path: "",
-    redirect: "threeJsDemo",
+    redirect: "draw",
   },
 ];
 
