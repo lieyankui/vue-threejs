@@ -26,9 +26,10 @@
         v-for="(file, index) in files"
         :key="index"
         :class="{ selected: file.id === currFileId }"
-        @mouseover="showImage($event, file)"
       >
-        <!-- @mouseout="hideImage" -->
+        <div class="toolbar">
+          <img :src="editIcon" @click="showImage(file)" alt="" />
+        </div>
         <img :src="file.src" />
         <p :title="file.name">{{ file.name }}</p>
       </li>
@@ -39,7 +40,11 @@
       :class="{ 'image-popover-show': !!currHoverFile && popoverShow }"
     >
       <div class="toolbar"></div>
-      <div class="image-popover-content" @click="(e) => (e.stopPropagation(),e.preventDefault())" :ref="popoverRef">
+      <div
+        class="image-popover-content"
+        @click="(e) => (e.stopPropagation(), e.preventDefault())"
+        :ref="popoverRef"
+      >
         <img :src="currHoverFile && currHoverFile.src" alt="" />
       </div>
     </div>
@@ -48,6 +53,7 @@
 
 <script>
 import uploadIcon from "./imgs/upload-icon.png";
+import editIcon from "./imgs/edit.png";
 const FILE_STATUS_ENUM = {
   ADD: "add",
   REMOVE: "remove",
@@ -80,10 +86,11 @@ export default {
     return {
       fileInputRef: "fileInputRef",
       uploadIcon: uploadIcon,
+      editIcon: editIcon,
       MAX_FILE_SIZE: 10 * 1024 * 1024,
       files: [],
       currFileId: "",
-      mouseHoverTimer: { timer: null, count: 0, ms: null },
+      mouseHoverTimer: null,
       popoverDelayMs: 300,
       popoverShow: false,
       popoverData: null,
@@ -100,41 +107,15 @@ export default {
       e.stopPropagation();
       setTimeout(() => {
         this.closePopover();
-      }, 3000);
+      }, 0);
     },
-    showImage(e, file) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (this.popoverShow === true) return;
-      if (!this.mouseHoverTimer.ms) {
-        this.mouseHoverTimer.ms = Date.now();
-      } else {
+    showImage(file) {
+      if (this.popoverShow === true || this.mouseHoverTimer) return;
+      this.mouseHoverTimer = setTimeout(() => {
         this.currHoverFile = file;
-        const interval = Date.now() - this.mouseHoverTimer.ms;
-        console.log("interval:", interval);
-        if (interval >= this.popoverDelayMs) {
-          this.showPopover(e, file);
-          this.mouseHoverTimer = { timer: null, count: 0, ms: null };
-        }
-      }
-    },
-    showPopover(e, file) {
-      console.log("e: ", e);
-      console.log("file: ", file);
-      const position = this.getPosition(e, this.$refs[this.popoverRef]);
-      const popoverEle = this.$refs[
-        this.popoverRef
-      ];
-      popoverEle.style.transform = `translate(${position.x}, ${position.y})`;
-      console.log("position: ", position);
-      this.popoverShow = true;
-      this.popoverData = {
-        imgSrc: file.src,
-        postion: {
-          x: e.x,
-          y: e.y,
-        },
-      };
+        this.popoverShow = true;
+        this.mouseHoverTimer = null;
+      }, 150);
     },
     getPosition({ x, y }, ele) {
       const position = { x: x - 100 / 2, y: y - 100 / 2 };
@@ -265,7 +246,7 @@ $high-light: #409eff;
     cursor: pointer;
     border: 1px solid rgb(224, 224, 230);
     border-radius: 3px;
-    img {
+    & > img {
       position: absolute;
       top: 40%;
       left: 50%;
@@ -288,6 +269,19 @@ $high-light: #409eff;
       text-overflow: ellipsis;
       text-align: center;
     }
+    .toolbar {
+      position: absolute;
+      display: none;
+      right: 0;
+      top: 0;
+      height: 24px;
+      border: 1px solid rgb(224, 224, 230);
+      z-index: 99;
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
     &:hover,
     &.selected {
       color: $high-light;
@@ -296,34 +290,48 @@ $high-light: #409eff;
         display: block;
       }
     }
+    &:hover {
+      .toolbar {
+        display: block;
+      }
+    }
   }
 }
 .image-popover {
   position: fixed;
   display: none;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-//   background-color: #ccc;
+  inset: 0;
   background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  padding: 30px;
+  box-sizing: border-box;
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+  }
   .image-popover-content {
-    position: absolute;
-    left: 0;
-    top: 0;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+    vertical-align: middle;
     background-color: #fff;
-    transition: transform 0.3s ease-in-out;
-    width: 100px;
-    height: 100px;
+    transition: transform 2s ease-in-out;
+    transform: scale(0);
+    img {
+      display: block;
+      max-height: 100%;
+      max-width: 100%;
+    }
   }
   &.image-popover-show {
     display: block;
     .image-popover-content {
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      height: auto;
+      transform: scale(1);
     }
   }
 }
