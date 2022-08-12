@@ -28,7 +28,18 @@
         :class="{ selected: file.id === currFileId }"
       >
         <div class="toolbar">
-          <img :src="editIcon" @click="showImage(file)" alt="" />
+          <img
+            title="编辑图片"
+            :src="editIcon"
+            @click="showImage(file)"
+            alt=""
+          />
+          <img
+            title="下载图片"
+            :src="downloadIcon"
+            @click="downloadImage(file)"
+            alt=""
+          />
         </div>
         <img :src="file.src" />
         <p :title="file.name">{{ file.name }}</p>
@@ -45,7 +56,8 @@
         @click="(e) => (e.stopPropagation(), e.preventDefault())"
         :ref="popoverRef"
       >
-        <img :src="currHoverFile && currHoverFile.src" alt="" />
+        <!-- <img :src="currHoverFile && currHoverFile.src" alt="" /> -->
+        <canvas :ref="canvasRef"></canvas>
       </div>
     </div>
   </div>
@@ -54,6 +66,7 @@
 <script>
 import uploadIcon from "./imgs/upload-icon.png";
 import editIcon from "./imgs/edit.png";
+import downloadIcon from "./imgs/download-icon.png";
 const FILE_STATUS_ENUM = {
   ADD: "add",
   REMOVE: "remove",
@@ -87,6 +100,7 @@ export default {
       fileInputRef: "fileInputRef",
       uploadIcon: uploadIcon,
       editIcon: editIcon,
+      downloadIcon: downloadIcon,
       MAX_FILE_SIZE: 10 * 1024 * 1024,
       files: [],
       currFileId: "",
@@ -96,18 +110,25 @@ export default {
       popoverData: null,
       popoverRef: "popoverRef",
       currHoverFile: null,
+      canvasRef: "canvasRef",
     };
   },
 
   mounted() {},
 
   methods: {
+    downloadImage(file) {
+      const a = document.createElement("a");
+      a.href = file.src;
+      a.download = file.name;
+      document.documentElement.appendChild(a);
+      a.click();
+      document.documentElement.removeChild(a);
+    },
     hideImage(e) {
       e.preventDefault();
       e.stopPropagation();
-      setTimeout(() => {
-        this.closePopover();
-      }, 0);
+      this.closePopover();
     },
     showImage(file) {
       if (this.popoverShow === true || this.mouseHoverTimer) return;
@@ -115,6 +136,10 @@ export default {
         this.currHoverFile = file;
         this.popoverShow = true;
         this.mouseHoverTimer = null;
+        setTimeout(() => {
+          this.$refs[this.popoverRef].style.transform =
+            "scale(1) rotate(360deg)";
+        }, 200);
       }, 150);
     },
     getPosition({ x, y }, ele) {
@@ -123,8 +148,11 @@ export default {
     },
 
     closePopover() {
-      this.popoverShow = false;
-      this.popoverData = null;
+      this.$refs[this.popoverRef].style.transform = "scale(0)";
+      setTimeout(() => {
+        this.popoverShow = false;
+        this.popoverData = null;
+      }, 500);
     },
     selectFilesChange(e) {
       const files = e.target.files;
@@ -194,7 +222,7 @@ $high-light: #409eff;
 .file-selector {
   position: relative;
   flex: 1;
-  width: 320px;
+  max-width: 320px;
   height: 160px;
   border: 1px dotted rgb(224, 224, 230);
   border-radius: 8px;
@@ -246,6 +274,7 @@ $high-light: #409eff;
     cursor: pointer;
     border: 1px solid rgb(224, 224, 230);
     border-radius: 3px;
+    transition: all 0.3s ease-in-out;
     & > img {
       position: absolute;
       top: 40%;
@@ -277,9 +306,14 @@ $high-light: #409eff;
       height: 24px;
       border: 1px solid rgb(224, 224, 230);
       z-index: 99;
+      overflow: hidden;
       img {
         width: 24px;
         height: 24px;
+        border-right: 1px solid $high-light;
+        &:last-child {
+          border-right: 0;
+        }
       }
     }
     &:hover,
@@ -291,8 +325,17 @@ $high-light: #409eff;
       }
     }
     &:hover {
+      transform: translateY(-8px) scale(1.02);
       .toolbar {
         display: block;
+        border: 1px solid $high-light;
+      }
+    }
+    &:active {
+      transform: translateY(0) scale(1);
+      .toolbar {
+        display: block;
+        border: 1px solid $high-light;
       }
     }
   }
@@ -306,6 +349,7 @@ $high-light: #409eff;
   text-align: center;
   padding: 30px;
   box-sizing: border-box;
+  z-index: 1000;
   &::after {
     content: "";
     display: inline-block;
@@ -320,8 +364,8 @@ $high-light: #409eff;
     box-sizing: border-box;
     vertical-align: middle;
     background-color: #fff;
-    transition: transform 2s ease-in-out;
-    transform: scale(0);
+    transition: all 0.5s ease-in-out;
+    transform: scale(0.1);
     img {
       display: block;
       max-height: 100%;
@@ -331,7 +375,7 @@ $high-light: #409eff;
   &.image-popover-show {
     display: block;
     .image-popover-content {
-      transform: scale(1);
+      // transform: scale(1) rotate(360deg);
     }
   }
 }
