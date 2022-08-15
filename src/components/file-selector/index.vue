@@ -57,7 +57,7 @@
         :ref="popoverRef"
       >
         <!-- <img :src="currHoverFile && currHoverFile.src" alt="" /> -->
-        <canvas :ref="canvasRef"></canvas>
+        <img-intensifier :src="currHoverFile && currHoverFile.src || ''" @close="hideImage"></img-intensifier>
       </div>
     </div>
   </div>
@@ -67,6 +67,7 @@
 import uploadIcon from "./imgs/upload-icon.png";
 import editIcon from "./imgs/edit.png";
 import downloadIcon from "./imgs/download-icon.png";
+import ImgIntensifier from "./img-intensifier/index.vue";
 const FILE_STATUS_ENUM = {
   ADD: "add",
   REMOVE: "remove",
@@ -79,6 +80,7 @@ function getUniqueId() {
 
 export default {
   name: "file-selector",
+  components: { ImgIntensifier },
   props: {
     value: {
       type: Array,
@@ -126,8 +128,8 @@ export default {
       document.documentElement.removeChild(a);
     },
     hideImage(e) {
-      e.preventDefault();
-      e.stopPropagation();
+      e && e.preventDefault();
+      e && e.stopPropagation();
       this.closePopover();
     },
     showImage(file) {
@@ -347,7 +349,7 @@ $high-light: #409eff;
   background-color: transparent;
   background-color: rgba(0, 0, 0, 0.3);
   text-align: center;
-  padding: 30px;
+  // padding: 30px;
   box-sizing: border-box;
   z-index: 1000;
   &::after {
@@ -361,6 +363,8 @@ $high-light: #409eff;
     display: inline-block;
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
     vertical-align: middle;
     background-color: #fff;
@@ -374,9 +378,9 @@ $high-light: #409eff;
   }
   &.image-popover-show {
     display: block;
-    .image-popover-content {
-      // transform: scale(1) rotate(360deg);
-    }
+    // .image-popover-content {
+    //   transform: scale(1) rotate(360deg);
+    // }
   }
 }
 </style>
