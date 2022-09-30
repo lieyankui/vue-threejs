@@ -17,6 +17,10 @@
 </template>
 
 <script>
+import { saveAsImg, setOpacity } from "@/utils/canvas_utils";
+import img1 from "/static/imgs/guoqing/gq1024.png";
+import img2 from "/static/imgs/guoqing/gq2048.png";
+import img3 from "/static/imgs/guoqing/gq4096.png";
 const OPERATION_TYPE = {
   SELECT: "SELECT",
   WATERMARK: "WATERMARK",
@@ -26,38 +30,38 @@ const OPERATION_TYPE = {
   CLOSE: "CLOSE",
 };
 const toolbarItemData = [
-  {
-    type: "SELECT",
-    text: "选择",
-    rebindThis: false,
-    handler: function () {
-      this.$emit("close");
-    },
-  },
-  {
-    type: "WATERMARK",
-    text: "水印",
-    rebindThis: false,
-    handler: function () {},
-  },
-  {
-    type: "CLIP",
-    text: "裁剪",
-    rebindThis: false,
-    handler: function () {},
-  },
-  {
-    type: "WRITE",
-    text: "画笔",
-    rebindThis: false,
-    handler: function () {},
-  },
-  {
-    type: "LINE",
-    text: "直线",
-    rebindThis: false,
-    handler: function () {},
-  },
+  // {
+  //   type: "SELECT",
+  //   text: "选择",
+  //   rebindThis: false,
+  //   handler: function () {
+  //     this.$emit("close");
+  //   },
+  // },
+  // {
+  //   type: "WATERMARK",
+  //   text: "水印",
+  //   rebindThis: false,
+  //   handler: function () {},
+  // },
+  // {
+  //   type: "CLIP",
+  //   text: "裁剪",
+  //   rebindThis: false,
+  //   handler: function () {},
+  // },
+  // {
+  //   type: "WRITE",
+  //   text: "画笔",
+  //   rebindThis: false,
+  //   handler: function () {},
+  // },
+  // {
+  //   type: "LINE",
+  //   text: "直线",
+  //   rebindThis: false,
+  //   handler: function () {},
+  // },
   // {
   //     type: '',
   //     text: '',
@@ -71,6 +75,17 @@ const toolbarItemData = [
     rebindThis: true,
     handler: function () {
       this.$emit("close");
+      this.reset();
+    },
+  },
+  {
+    type: "SAVE",
+    text: "保存",
+    rebindThis: true,
+    handler: function () {
+      this.$emit("save");
+      // this.reset();
+      this.save();
     },
   },
 ];
@@ -100,40 +115,58 @@ export default {
 
   methods: {
     toolbarItemClick(item) {
-      console.log("item: ", item);
       if (item.rebindThis) {
         const handler = item.handler.bind(this);
         handler();
       }
     },
     init() {
+      if (!this.src) return;
       this.loadImg(this.src).then((img) => {
         this.initCanvas(img);
         this.drawImage(img);
+        this.drawImageBySrc(img1);
       });
     },
     initCanvas(img) {
       this.img = img;
       this.canvas = this.$refs[this.canvasRef];
-      const { width, height } = this.getCanvasContainerSize();
-      const wb = img.width / width;
-      const hb = img.height / height;
-      if (wb >= 0.9 || hb >= 0.9) {
-        if (wb > hb) {
-          img.width = 0.9 * width;
-          img.height = "auto";
-        } else {
-          img.height = 0.9 * height;
-          img.width = "auto";
-        }
-      }
-      this.canvas.width = width;
-      this.canvas.height = height;
+      const { width, height } = this.getImgSize(img);
+      this.canvas.width = img.width = width;
+      this.canvas.height = img.height = height;
       if (this.canvas.getContext) {
         this.ctx = this.canvas.getContext("2d");
       } else {
         alert("Error: Your brower is too old");
       }
+    },
+    setImgSize(img) {
+      const {width, height} = this.getImgSize(img);
+      img.width = width;
+      img.height = height;
+    },
+    getImgSize(img) {
+      const { width, height } = this.getCanvasContainerSize();
+      const wb = img.width / width;
+      const hb = img.height / height;
+      if (wb > hb) {
+        return {
+          width,
+          height: img.height / wb
+        };
+      } else {
+        return {
+          width: img.width / hb,
+          height
+        };
+      }
+    },
+    drawImageBySrc(src) {
+      this.loadImg(src).then((img) => {
+        this.setImgSize(img);
+        this.drawImage(img);
+        setOpacity(this.canvas);
+      });
     },
     drawImage(img) {
       this.ctx.drawImage(img, 0, 0, img.width, img.height);
@@ -145,7 +178,9 @@ export default {
         const img = new Image();
         img.src = src || this.src;
         img.onload = () => {
-          resolve(img);
+          setTimeout(() => {
+            resolve(img);
+          }, 800);
         };
         img.onerror = (err) => {
           reject(err);
@@ -158,6 +193,13 @@ export default {
     },
     getCanvas() {
       return this.$ref[this.canvasRef];
+    },
+    save() {
+      saveAsImg(this.canvas);
+    },
+    reset() {
+      this.canvas.width = 0;
+      this.canvas.height = 0;
     },
   },
   watch: {
@@ -178,6 +220,7 @@ $high-light: #409eff;
   position: relative;
   width: 100%;
   height: 100%;
+  padding: 12px;
   .toolbar {
     position: absolute;
     right: 0;
@@ -204,11 +247,21 @@ $high-light: #409eff;
       transform: translateY(0);
     }
   }
+
+  @media screen and (max-width: 600px) {
+    padding-top: 60px;
+    .toolbar {
+      transform: translateY(0%);
+      // flex-direction: column;
+      height: auto;
+    }
+  }
   .canvas-container {
     width: 100%;
     height: 100%;
     text-align: center;
     canvas {
+      border: 0;
       display: inline-block;
       vertical-align: middle;
     }

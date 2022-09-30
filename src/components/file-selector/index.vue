@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ display: listPosition === 'right' ? 'flex' : 'block' }">
+  <div class="file-selector-wrapper">
     <div
       class="file-selector"
       :style="{
@@ -8,9 +8,12 @@
       @dragover="fileDragover"
       @drop="fileDrop"
     >
-      <p>
-        拖拽到此处上传或者
+      <p class="large">
+        <span>拖拽到此处上传或者</span>
         <a href="javascript: void(0)" @click="showFileSelector">点击上传</a>
+      </p>
+      <p class="small">
+        <a href="javascript: void(0)" @click="showFileSelector">点击选择头像</a>
       </p>
       <input
         type="file"
@@ -57,7 +60,10 @@
         :ref="popoverRef"
       >
         <!-- <img :src="currHoverFile && currHoverFile.src" alt="" /> -->
-        <img-intensifier :src="currHoverFile && currHoverFile.src || ''" @close="hideImage"></img-intensifier>
+        <img-intensifier
+          :src="(currHoverFile && currHoverFile.src) || ''"
+          @close="hideImage"
+        ></img-intensifier>
       </div>
     </div>
   </div>
@@ -96,6 +102,12 @@ export default {
       type: String,
       default: "right", // bottom | right | inner
     },
+    originImgUrls: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
@@ -116,7 +128,10 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    if (this.originImgUrls && this.originImgUrls.length) {
+    }
+  },
 
   methods: {
     downloadImage(file) {
@@ -171,6 +186,7 @@ export default {
         this.currFileId = file.id;
         this.$emit("file-selected", file);
       }
+      this.showImage(file);
     },
     fileDragover(e) {
       e.preventDefault();
@@ -201,6 +217,15 @@ export default {
       });
       reader.readAsDataURL(file);
     },
+    // getImageData(file) {
+    //   return {
+    //     id: getUniqueId(),
+    //     name: file.name,
+    //     status: FILE_STATUS_ENUM.ADD,
+    //     file: file,
+    //     src: reader.result,
+    //   }
+    // }
   },
   watch: {
     files(newVal) {
@@ -217,131 +242,177 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$high-light: #409eff;
+$high-light: red;
 * {
   box-sizing: border-box;
 }
-.file-selector {
-  position: relative;
-  flex: 1;
-  max-width: 320px;
-  height: 160px;
-  border: 1px dotted rgb(224, 224, 230);
-  border-radius: 8px;
-  padding: 24px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  //   background-size: 30% 30%;
-  text-align: center;
-  transition: background 0.3s ease-in-out;
-  &:hover {
-    border-color: $high-light;
-    background-position: center 40%;
-  }
-  input[type="file"] {
-    display: none;
-  }
-  p {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    font-size: 20px;
-    text-align: center;
-    color: #aaa;
-    a {
-      text-decoration: none;
-      color: $high-light;
-    }
-  }
-}
-.file-list {
-  flex: 1;
+.file-selector-wrapper {
   display: flex;
-  //   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px 10px;
-  list-style: none;
-  padding: 0 24px;
-  margin: 0;
-  .file-list-item {
+
+  .file-selector {
     position: relative;
-    width: 100px;
-    height: 125px;
-    overflow: hidden;
-    // padding-bottom: 26px;
-    line-height: 28px;
-    font-size: 14px;
+    flex: 1;
+    max-width: 320px;
+    height: 160px;
+    border: 1px dotted rgb(224, 224, 230);
+    border-radius: 8px;
+    padding: 24px;
+    background-position: center center;
+    background-repeat: no-repeat;
     cursor: pointer;
-    border: 1px solid rgb(224, 224, 230);
-    border-radius: 3px;
-    transition: all 0.3s ease-in-out;
-    & > img {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      display: block;
-      max-width: 100%;
-      max-height: 100%;
-      margin: auto;
-      transform: translate(-50%, -50%);
+    //   background-size: 30% 30%;
+    text-align: center;
+    transition: background 0.3s ease-in-out;
+    &:hover {
+      border-color: $high-light;
+      background-position: center 40%;
+    }
+    input[type="file"] {
+      display: none;
     }
     p {
-      //   display: none;
+      font-family: "font-cat";
       position: absolute;
       width: 100%;
-      line-height: 25px;
+      left: 0;
       bottom: 0;
-      margin: 0;
-      padding: 0 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 20px;
       text-align: center;
+      color: #aaa;
+      a {
+        text-decoration: none;
+        color: $high-light;
+      }
+
+      &.small {
+        display: none;
+      }
+      &.large {
+        display: block;
+      }
     }
-    .toolbar {
-      position: absolute;
-      display: none;
-      right: 0;
-      top: 0;
-      height: 24px;
-      border: 1px solid rgb(224, 224, 230);
-      z-index: 99;
+  }
+
+  .file-list {
+    flex: 1;
+    display: flex;
+    //   justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+    list-style: none;
+    padding: 0 24px;
+    margin: 0;
+    .file-list-item {
+      position: relative;
+      width: 100px;
+      height: 125px;
       overflow: hidden;
-      img {
-        width: 24px;
+      // padding-bottom: 26px;
+      line-height: 28px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid rgb(224, 224, 230);
+      border-radius: 3px;
+      transition: all 0.3s ease-in-out;
+      & > img {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        transform: translate(-50%, -50%);
+      }
+      p {
+        //   display: none;
+        position: absolute;
+        width: 100%;
+        line-height: 25px;
+        bottom: 0;
+        margin: 0;
+        padding: 0 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
+      .toolbar {
+        position: absolute;
+        display: none;
+        right: 0;
+        top: 0;
         height: 24px;
-        border-right: 1px solid $high-light;
-        &:last-child {
-          border-right: 0;
+        border: 1px solid rgb(224, 224, 230);
+        z-index: 99;
+        overflow: hidden;
+        img {
+          width: 24px;
+          height: 24px;
+          border-right: 1px solid $high-light;
+          &:last-child {
+            border-right: 0;
+          }
+        }
+      }
+      &:hover,
+      &.selected {
+        color: $high-light;
+        border-color: $high-light;
+        p {
+          display: block;
+        }
+      }
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        .toolbar {
+          display: block;
+          border: 1px solid $high-light;
+        }
+      }
+      &:active {
+        transform: translateY(0) scale(1);
+        .toolbar {
+          display: block;
+          border: 1px solid $high-light;
         }
       }
     }
-    &:hover,
-    &.selected {
-      color: $high-light;
-      border-color: $high-light;
-      p {
-        display: block;
+
+    @media screen and (max-width: 600px) {
+      padding: 24px 0;
+      .file-list-item {
+        .toolbar {
+          display: none;
+        }
+        &:hover {
+          .toolbar {
+            display: none;
+          }
+        }
       }
     }
-    &:hover {
-      transform: translateY(-8px) scale(1.02);
-      .toolbar {
-        display: block;
-        border: 1px solid $high-light;
+  }
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    .file-selector {
+      height: auto;
+      background-image: none !important;
+      padding: 12px;
+      p.large {
+        display: none;
       }
-    }
-    &:active {
-      transform: translateY(0) scale(1);
-      .toolbar {
+      p.small {
+        position: relative;
         display: block;
-        border: 1px solid $high-light;
+        padding: 0;
+        margin: 0;
       }
     }
   }
 }
+
 .image-popover {
   position: fixed;
   display: none;

@@ -31,6 +31,14 @@ const routes = [
     component: () => import("../views/draw/index.vue"),
   },
   {
+    path: "/photo-create",
+    name: "photo-create",
+    meta: {
+      title: '国庆头像制作'
+    },
+    component: () => import("../views/photo/index.vue"),
+  },
+  {
     path: "",
     redirect: "draw",
   },

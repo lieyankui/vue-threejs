@@ -17,3 +17,18 @@ export function saveAsImg(canvas, fileName) {
 export function toDataUrl(canvas, type = 'MIME_TYPE') {
     return canvas.toDataURL(type);
 }
+
+export function setOpacity(canvas, opacity = 0.5) {
+    if (canvas && canvas.getContext) {
+        const width = canvas.width;
+        const height = canvas.height;
+        const ctx = canvas.getContext('2d');
+        const imgData = ctx.getImageData(0, 0, width, height);
+        for (var i = 0 , len = imgData.data.length ; i < len ; i += 4 ) {
+            imgData.data[i + 3] = imgData.data[i + 3] * alpha;
+        }
+        ctx.putImageData(imgData , x , y);
+    } else {
+        return null;
+    }
+}

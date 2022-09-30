@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'font-fzst';
+    src: url('/static/font/three/fzst.TTF') format('truetype');
+}
+@font-face {
+    font-family: 'font-cat';
+    src: url('/static/font/cat-font/cat.ttf');
+}
 @import './variables.scss';
 @import './base.scss';
 @import './webgl-tutorials.scss';
