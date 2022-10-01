@@ -20,15 +20,28 @@
         outline: none;
         box-sizing: border-box;
       }
+      h1 {
+        text-align: center;
+        color: #ee1c25;
+      }
       .canvas-container {
-        width: 600px;
-        height: 400px;
+        max-width: 600px;
+        max-height: 400px;
         margin: 100px auto;
         box-shadow: 3px 3px 20px 1px red;
+
+        @media screen and (max-width: 600px) {
+          width: auto;
+          height: auto;
+        }
+      }
+      .canvas-container canvas {
+        display: block;
       }
     </style>
   </head>
   <body>
+    <h1>国旗</h1>
     <div class="canvas-container">
       <canvas></canvas>
     </div>
@@ -55,7 +68,7 @@
       function initCanvasSize() {
         const { width, height } = container.getBoundingClientRect();
         canvas.width = width;
-        canvas.height = height;
+        canvas.height = width * 2 / 3;
         // 单位长度
         unit = width / 30;
       }
@@ -68,6 +81,7 @@
           alert("Your browser is too lower!!!");
         }
       }
+
       function drawBg(ctx) {
         const { width, height } = canvas;
         ctx.fillStyle = bgColor;
@@ -101,6 +115,7 @@
           );
         });
       }
+
       function drawStar(ctx, x, y, r, deg) {
         // console.log('getSmallR: ', getSmallR(3));
         const smallR = getSmallR(r);
