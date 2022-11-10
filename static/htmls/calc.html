@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算x, y, 税</title>
+    <style>
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+      }
+      body {
+        background-image: url('../imgs/bg.png');
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      div.wrapper {
+        text-align: center;
+        min-width: 330px;
+        min-height: 500px;
+        margin: 24px;
+        padding: 12px 12px;
+        border-radius: 12px;
+        backdrop-filter: blur(30px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      h1 {
+        padding-top: 20px;
+        line-height: 60px;
+      }
+
+      .my-input {
+        padding: 0 12px;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        line-height: 32px;
+        outline: none;
+        user-select: none;
+        border-radius: 3px;
+      }
+      .my-input:focus {
+        border: 1px solid skyblue;
+      }
+      .my-input::placeholder {
+        color: #ccc;
+      }
+
+      button {
+        outline: none;
+        padding: 8px 12px;
+        background-color: skyblue;
+        border: 0;
+        color: #fff;
+        border-radius: 3px;
+        user-select: none;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      .row * {
+        vertical-align: middle;
+      }
+      .row::after {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 100%;
+        vertical-align: middle;
+      }
+
+      .result {
+        display: none;
+        min-width: 240px;
+        margin: 20px auto;
+        text-align: left;
+      }
+      label {
+        display: flex;
+        align-items: center;
+      }
+      label .label {
+        display: inline-block;
+        width: 40px;
+        padding-right: 12px;
+        text-align: right;
+      }
+      label .label + span {
+        flex: 1;
+        padding: 0 24px;
+        background-color: skyblue;
+        line-height: 32px;
+        text-align: center;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>计算x, y, 税</h1>
+      <div class="row">
+        <input
+          class="my-input"
+          id="total"
+          type="text"
+          placeholder="请输入总金额"
+        />
+        <button onclick="calc()">计算</button>
+        <button onclick="reset()">重置</button>
+      </div>
+      <div class="result">
+        <div class="row">
+          <label><span class="label">x: </span><span id="x"></span></label>
+        </div>
+        <div class="row">
+          <label><span class="label">y: </span><span id="y"></span></label>
+        </div>
+        <div class="row">
+          <label><span class="label">税: </span><span id="shui"></span></label>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const total = document.querySelector("#total");
+    const result = document.querySelector(".result");
+    const xEle = document.querySelector("#x");
+    const yEle = document.querySelector("#y");
+    const shuiEle = document.querySelector("#shui");
+
+
+    function calc() {
+      const val = total.value;
+      console.log("val: ", val);
+      const y = Math.round(parseFloat(val) / 1.06 / 1.15);
+      const x = Math.round(y * 0.15);
+      const shui = Math.round((x + y) * 0.06);
+
+      xEle.innerHTML = x;
+      yEle.innerHTML = y;
+      shuiEle.innerHTML = shui;
+      showResult();
+
+
+    }
+
+    function reset() {
+      total.value = "";
+      xEle.innerHTML = "";
+      yEle.innerHTML = "";
+      shuiEle.innerHTML = "";
+      hideResult();
+    }
+
+    function showResult() {
+      result.style.display = "block";
+    }
+    function hideResult() {
+      result.style.display = "none";
+    }
+    </script>
+</html>
