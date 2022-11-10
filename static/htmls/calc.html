@@ -106,7 +106,7 @@
         <input
           class="my-input"
           id="total"
-          type="text"
+          type="number"
           placeholder="请输入总金额"
         />
         <button onclick="calc()">计算</button>
@@ -136,6 +136,10 @@
     function calc() {
       const val = total.value;
       console.log("val: ", val);
+      if (!val) {
+        alert("请确认输入的数据");
+        return;
+      }
       const y = Math.round(parseFloat(val) / 1.06 / 1.15);
       const x = Math.round(y * 0.15);
       const shui = Math.round((x + y) * 0.06);
@@ -144,8 +148,6 @@
       yEle.innerHTML = y;
       shuiEle.innerHTML = shui;
       showResult();
-
-
     }
 
     function reset() {
