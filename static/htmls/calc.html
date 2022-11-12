@@ -102,6 +102,36 @@
   <body>
     <div class="wrapper">
       <h1>计算x, y, 税</h1>
+      <div class="row" style="margin-bottom: 12px;">
+        <span style="color: red;">x</span>
+        <span>=</span>
+        <input
+          class="my-input"
+          style="width: 80px;"
+          id="xyRate"
+          type="number"
+          value="0.15"
+        />
+        <span>*</span>
+        <span style="color: red;">y</span>
+      </div>
+      <div class="row" style="margin-bottom: 12px;">
+        <span style="color: red;">税</span>
+        <span>=</span>
+        <input
+          class="my-input"
+          style="width: 80px;"
+          id="shuiRate"
+          type="number"
+          value="0.06"
+        />
+        <span>*</span>
+        <span>(</span>
+        <span style="color: red;">x</span>
+        <span>+</span>
+        <span style="color: red;">y</span>
+        <span>)</span>
+      </div>
       <div class="row">
         <input
           class="my-input"
@@ -135,18 +165,20 @@
     const yEle = document.querySelector("#y");
     const shuiEle = document.querySelector("#shui");
     const shuiEle2 = document.querySelector("#shui2");
-
+    const xyRateEle = document.querySelector("#xyRate");
+    const shuiRateEle = document.querySelector("#shuiRate");
 
     function calc() {
-      const val = total.value;
-      console.log("val: ", val);
-      if (!val) {
+      const val = parseFloat(total.value);
+      if (isNaN(val) || !val) {
         alert("请确认输入的数据");
         return;
       }
-      const y = Math.round(parseFloat(val) / 1.06 / 1.15);
-      const x = Math.round(y * 0.15);
-      const shui = Math.round((x + y) * 0.06);
+      const xyRate = parseFloat(xyRateEle.value);
+      const shuiRate = parseFloat(shuiRateEle.value);
+      const y = Math.round(val / (shuiRate + 1) / (xyRate + 1));
+      const x = Math.round(y * xyRate);
+      const shui = Math.round((x + y) * shuiRate);
       const shui2 = x + shui;
 
       xEle.innerHTML = x;
@@ -162,6 +194,8 @@
       yEle.innerHTML = "";
       shuiEle.innerHTML = "";
       shuiEle2.innerHTML = "";
+      xyRateEle.value = 0.15;
+      xyRateEle.value = 0.06;
       hideResult();
     }
 
