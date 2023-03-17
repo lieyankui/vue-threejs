@@ -37,7 +37,7 @@ import {
  * translate: ƒ translate(m, tx, ty)
  * translation: ƒ translation(tx, ty)
  */
-import m3 from "@/utils/math/m3";
+// import m3 from "@/utils/math/m3";
 import m4 from "@/utils/math/m4";
 export default {
   name: "webgl-test04",

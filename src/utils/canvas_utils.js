@@ -25,9 +25,9 @@ export function setOpacity(canvas, opacity = 0.5) {
         const ctx = canvas.getContext('2d');
         const imgData = ctx.getImageData(0, 0, width, height);
         for (var i = 0 , len = imgData.data.length ; i < len ; i += 4 ) {
-            imgData.data[i + 3] = imgData.data[i + 3] * alpha;
+            imgData.data[i + 3] = imgData.data[i + 3] * opacity;
         }
-        ctx.putImageData(imgData , x , y);
+        ctx.putImageData(imgData , width , height);
     } else {
         return null;
     }

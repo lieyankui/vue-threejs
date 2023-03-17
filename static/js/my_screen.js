@@ -351,7 +351,7 @@ MyScreen.prototype={
 				self.setCurrScreen(self);
 				absX=e1.pageX-getLeftVal(dom);
 				absY=e1.pageY-getTopVal(dom);
-				documentx.body.onmousemove=function(event){
+				document.body.onmousemove=function(event){
 					var e2=event||window.event;
 					if(self.isMove){
 						setStyle(self.domObj,{left:(e2.pageX-absX)+"px",top:(e2.pageY-absY)+"px"});
@@ -359,7 +359,7 @@ MyScreen.prototype={
 				}
 			}
 			self.header.onmouseup=function(event){
-				documentx.body.onmousemove=null;
+				document.body.onmousemove=null;
 				self.isMove=false;
 				if(!self.maxFlag){
 					self.initStyle.left=getLeftVal(self.domObj)+"px";

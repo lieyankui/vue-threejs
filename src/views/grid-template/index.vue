@@ -1,6 +1,6 @@
 <template>
   <div class="comp-container" :ref="container">
-    <tl-grid-template :data="initConfData"></tl-grid-template>
+    <tl-grid-template :data="initConfData" @save="onSave"></tl-grid-template>
     <!-- <test-drag></test-drag> -->
   </div>
 </template>
@@ -330,6 +330,9 @@ export default {
     getContainer() {
       return this.$refs[this.contaienr];
     },
+    onSave(data) {
+      console.log('data: ', data);
+    }
   },
 };
 </script>
