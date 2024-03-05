@@ -1,4 +1,4 @@
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const path = require("path");
 
 // function resolve(url) {
@@ -6,20 +6,20 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 // }
 
 module.exports = {
-  publicPath: "./",
-  outputDir: "dist",
-  assetsDir: "static",
+  publicPath: './',
+  outputDir: 'dist',
+  assetsDir: 'static',
   lintOnSave: false,
   configureWebpack: {
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: "./static",
-            to: "static",
-          },
-        ],
-      }),
-    ],
-  },
-};
+            from: './static',
+            to: 'static'
+          }
+        ]
+      })
+    ]
+  }
+}

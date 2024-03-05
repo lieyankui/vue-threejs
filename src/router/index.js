@@ -39,6 +39,14 @@ const routes = [
     component: () => import("../views/photo/index.vue"),
   },
   {
+    path: "/sd-news",
+    name: "sd-news",
+    meta: {
+      title: '山东新闻'
+    },
+    component: () => import("../views/news/index.vue"),
+  },
+  {
     path: "",
     redirect: "draw",
   },
