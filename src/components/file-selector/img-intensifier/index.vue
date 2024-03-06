@@ -125,7 +125,7 @@ export default {
       this.loadImg(this.src).then((img) => {
         this.initCanvas(img);
         this.drawImage(img);
-        this.drawImageBySrc(img1);
+        // this.drawImageBySrc(img1);
       });
     },
     initCanvas(img) {

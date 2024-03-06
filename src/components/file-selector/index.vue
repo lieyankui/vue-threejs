@@ -129,8 +129,7 @@ export default {
   },
 
   mounted() {
-    if (this.originImgUrls && this.originImgUrls.length) {
-    }
+    // if (this.originImgUrls && this.originImgUrls.length) {}
   },
 
   methods: {
@@ -160,6 +159,7 @@ export default {
       }, 150);
     },
     getPosition({ x, y }, ele) {
+      console.log("ele: ", ele);
       const position = { x: x - 100 / 2, y: y - 100 / 2 };
       return position;
     },
@@ -173,7 +173,10 @@ export default {
     },
     selectFilesChange(e) {
       const files = e.target.files;
-      files.forEach(this.files2Imgs);
+      for (let i = 0; i < files.length; i++) {
+        const file = files.item(i);
+        this.files2Imgs(file);
+      }
     },
     showFileSelector() {
       this.$refs[this.fileInputRef].click();
