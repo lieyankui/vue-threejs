@@ -28,6 +28,7 @@ export default {
 
 <style lang="scss" scoped>
 .news-item {
+  margin-bottom: 12px;
   &:not(:last-child) {
     border-bottom: 1px solid #aaa;
   }

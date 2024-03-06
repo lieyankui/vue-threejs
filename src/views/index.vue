@@ -47,7 +47,7 @@ export default {
     };
   },
   mounted() {
-    this.navItemClicked(this.compArr[0]);
+    this.navItemClicked(this.compArr[this.compArr.length - 1]);
   },
   methods: {
     navItemClicked(item) {

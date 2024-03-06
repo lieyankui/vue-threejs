@@ -26,4 +26,5 @@ export default [
     {text: 'webgl test_12', compPath: 'webgl/test_12', code: 'webgl_test_12'},
     {text: 'webgl test_13', compPath: 'webgl/test_13', code: 'webgl_test_13'},
     {text: 'webgl test_14', compPath: 'webgl/test_14', code: 'webgl_test_14'},
+    {text: 'virual_scroll', compPath: 'virual-scroll/index', code: 'virual_scroll'},
 ];

@@ -41,17 +41,16 @@ div {
 }
 .comp-content {
   width: 100%;
-  height: 100%;
   margin: 0 auto;
   max-width: 1200px;
   padding: 0 24px;
-  overflow: auto;
 }
 .comp-container {
   max-height: 100%;
   position: relative;
-  padding-bottom: 60px;
   background: url("/static/imgs/news-bg.jpg");
+  overflow: auto;
+  padding-bottom: 60px;
 
   .comp-footer {
     position: fixed;
@@ -64,6 +63,7 @@ div {
     bottom: 0;
     left: 0;
     box-shadow: 0 -10px 20px 3px #ccc;
+    background: url("/static/imgs/news-bg.jpg");
 
     .comp-footer-content {
       width: 100%;
